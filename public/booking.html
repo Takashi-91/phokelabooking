@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Stay - Phokela Guest House</title>
+    <link href="/css/compiled.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex-shrink-0 flex items-center">
+                        <div class="bg-orange-500 p-2 rounded-lg mr-3">
+                            <i class="fas fa-home text-white text-lg"></i>
+                        </div>
+                        <span class="text-xl font-bold text-gray-900">Phokela Guest House</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Home</a>
+                    <a href="/about.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">About</a>
+                    <a href="/gallery.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Gallery</a>
+                    <a href="/booking.html" class="text-orange-500 font-medium">Book Now</a>
+                    <a href="/admin.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Admin</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-orange-500">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="/" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Home</a>
+                <a href="/about.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">About</a>
+                <a href="/gallery.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Gallery</a>
+                <a href="/booking.html" class="block px-3 py-2 text-orange-500 font-medium">Book Now</a>
+                <a href="/admin.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-16 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="mb-6">
+                    <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-calendar-check text-white text-2xl"></i>
+                    </div>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Book Your Stay</h1>
+                <p class="text-xl text-gray-300">Experience luxury and comfort in the heart of nature</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Form -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-3 gap-12">
+                <!-- Booking Form -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-8">Reservation Details</h2>
+                        
+                        <!-- Step 1: Room Selection -->
+                        <div id="step-1" class="booking-step">
+                            <h3 class="text-xl font-semibold mb-6">1. Select Your Room</h3>
+                            <div id="rooms-list" class="space-y-4">
+                                <!-- Rooms will be loaded dynamically -->
+                            </div>
+                            <div class="mt-6">
+                                <button id="next-step-1" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-300 disabled:bg-gray-400" disabled>
+                                    Next: Select Dates
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Date Selection -->
+                        <div id="step-2" class="booking-step hidden">
+                            <h3 class="text-xl font-semibold mb-6">2. Select Your Dates</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Check-in Date</label>
+                                    <input type="date" id="checkin-date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Check-out Date</label>
+                                    <input type="date" id="checkout-date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <button id="check-availability" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-300">
+                                    Check Availability
+                                </button>
+                                <button id="back-step-1" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-300 ml-4">
+                                    Back
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Guest Information -->
+                        <div id="step-3" class="booking-step hidden">
+                            <h3 class="text-xl font-semibold mb-6">3. Guest Information</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                                    <input type="text" id="guest-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                                    <input type="email" id="guest-email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
+                                    <input type="tel" id="guest-phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Number of Guests *</label>
+                                    <select id="number-of-guests" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                        <option value="">Select guests</option>
+                                        <option value="1">1 Guest</option>
+                                        <option value="2">2 Guests</option>
+                                        <option value="3">3 Guests</option>
+                                        <option value="4">4 Guests</option>
+                                        <option value="5">5 Guests</option>
+                                        <option value="6">6 Guests</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Special Requests</label>
+                                <textarea id="special-requests" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Any special requests or requirements..."></textarea>
+                            </div>
+                            <div class="mt-6">
+                                <button id="proceed-to-payment" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300">
+                                    Proceed to Payment
+                                </button>
+                                <button id="back-step-2" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ml-4">
+                                    Back
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Payment -->
+                        <div id="step-4" class="booking-step hidden">
+                            <h3 class="text-xl font-semibold mb-6">4. Payment</h3>
+                            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                                <h4 class="text-lg font-semibold mb-4">Booking Summary</h4>
+                                <div id="booking-summary" class="space-y-2">
+                                    <!-- Summary will be populated dynamically -->
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button id="process-payment" class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-12 rounded-lg text-lg transition duration-300">
+                                    <i class="fas fa-credit-card mr-2"></i>
+                                    Pay Now
+                                </button>
+                                <button id="back-step-3" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-lg transition duration-300 ml-4">
+                                    Back
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Summary Sidebar -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-lg p-6 sticky top-24">
+                        <h3 class="text-xl font-semibold mb-6">Your Selection</h3>
+                        <div id="booking-sidebar">
+                            <div class="text-center text-gray-500 py-8">
+                                <i class="fas fa-bed text-4xl mb-4"></i>
+                                <p>Select a room to see details</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Modal -->
+    <div id="loading-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-8 text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p class="text-lg">Processing your booking...</p>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-8 text-center max-w-md mx-4">
+            <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-check text-2xl text-green-600"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Booking Successful!</h3>
+            <p class="text-gray-600 mb-6">Your booking has been confirmed. You will receive a confirmation email shortly.</p>
+            <button id="close-success-modal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-8 text-center max-w-md mx-4">
+            <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-check-circle text-2xl text-green-600"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Booking Confirmed!</h3>
+            <p id="success-message" class="text-gray-600 mb-6">Your booking has been successfully confirmed. You will receive a confirmation email shortly.</p>
+            <button id="close-success-modal" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-8 text-center max-w-md mx-4">
+            <div class="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-exclamation-triangle text-2xl text-red-600"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Booking Failed</h3>
+            <p id="error-message" class="text-gray-600 mb-6">There was an error processing your booking. Please try again.</p>
+            <button id="close-error-modal" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Phokela Guest House</h3>
+                    <p class="text-gray-400">Your home away from home in the beautiful mountains of South Africa.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="/about.html" class="text-gray-400 hover:text-white transition">About</a></li>
+                        <li><a href="/gallery.html" class="text-gray-400 hover:text-white transition">Gallery</a></li>
+                        <li><a href="/booking.html" class="text-gray-400 hover:text-white transition">Book Now</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400">Room Service</li>
+                        <li class="text-gray-400">Concierge</li>
+                        <li class="text-gray-400">Free WiFi</li>
+                        <li class="text-gray-400">Parking</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400">+27 12 345 6789</li>
+                        <li class="text-gray-400">info@phokelaguesthouse.co.za</li>
+                        <li class="text-gray-400">123 Mountain View Road</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 Phokela Guest House. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/booking.js"></script>
+</body>
+</html>

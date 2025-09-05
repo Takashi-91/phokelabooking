@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Phokela Guest House</title>
+    <link href="/css/compiled.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-home text-2xl text-blue-600 mr-2"></i>
+                        <span class="text-xl font-bold text-gray-900">Phokela Guest House</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-blue-600 transition">Home</a>
+                    <a href="/about.html" class="text-gray-700 hover:text-blue-600 transition">About</a>
+                    <a href="/gallery.html" class="text-gray-700 hover:text-blue-600 transition">Gallery</a>
+                    <a href="/booking.html" class="text-gray-700 hover:text-blue-600 transition">Book Now</a>
+                    <a href="/admin.html" class="text-blue-600 font-medium">Admin</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="/" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Home</a>
+                <a href="/about.html" class="block px-3 py-2 text-gray-700 hover:text-blue-600">About</a>
+                <a href="/gallery.html" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Gallery</a>
+                <a href="/booking.html" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Book Now</a>
+                <a href="/admin.html" class="block px-3 py-2 text-blue-600 font-medium">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Form -->
+    <div id="login-section" class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center">
+                <div class="mx-auto h-12 w-12 bg-orange-500 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fas fa-lock text-white text-xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900">
+                    Admin Login
+                </h2>
+                <p class="mt-2 text-sm text-gray-600">
+                    Sign in to access the admin panel
+                </p>
+            </div>
+            <form id="login-form" class="mt-8 space-y-6">
+                <div class="space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                        <input id="username" name="username" type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200" placeholder="Enter your username">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input id="password" name="password" type="password" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200" placeholder="Enter your password">
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200">
+                        Sign in
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="hidden">
+        <!-- Header -->
+        <div class="pt-20 pb-8 bg-white border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+                        <p class="text-gray-600">Welcome back, <span id="admin-username"></span></p>
+                    </div>
+                    <button id="logout-btn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <section class="py-8 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-blue-50 p-6 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="bg-blue-100 p-3 rounded-full">
+                                <i class="fas fa-bed text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Rooms</p>
+                                <p id="total-rooms" class="text-2xl font-bold text-gray-900">-</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <i class="fas fa-calendar-check text-green-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Total Bookings</p>
+                                <p id="total-bookings" class="text-2xl font-bold text-gray-900">-</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-yellow-50 p-6 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="bg-yellow-100 p-3 rounded-full">
+                                <i class="fas fa-dollar-sign text-yellow-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Monthly Revenue</p>
+                                <p id="monthly-revenue" class="text-2xl font-bold text-gray-900">-</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-purple-50 p-6 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="bg-purple-100 p-3 rounded-full">
+                                <i class="fas fa-percentage text-purple-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-600">Occupancy Rate</p>
+                                <p id="occupancy-rate" class="text-2xl font-bold text-gray-900">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <section class="py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Rooms Management -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold text-gray-900">Rooms Management</h2>
+                                <button id="add-room-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                                    <i class="fas fa-plus mr-2"></i>Add Room
+                                </button>
+                            </div>
+                            <div id="rooms-table" class="overflow-x-auto">
+                                <!-- Rooms table will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bookings Management -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h2 class="text-2xl font-bold text-gray-900 mb-6">Recent Bookings</h2>
+                            <div id="recent-bookings" class="space-y-4">
+                                <!-- Recent bookings will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- All Bookings -->
+                <div class="mt-8">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-900">All Bookings</h2>
+                            <div class="flex space-x-2">
+                                <select id="booking-filter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="all">All Bookings</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="confirmed">Confirmed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="bookings-table" class="overflow-x-auto">
+                            <!-- Bookings table will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Add/Edit Room Modal -->
+    <div id="room-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-8 max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="room-modal-title" class="text-2xl font-bold text-gray-900">Add New Room</h3>
+                <button id="close-room-modal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form id="room-form">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Room Name *</label>
+                        <input type="text" id="room-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Room Type *</label>
+                        <input type="text" id="room-type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Price (per night) *</label>
+                        <input type="number" id="room-price" step="0.01" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Max Guests *</label>
+                        <input type="number" id="room-max-guests" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+                        <textarea id="room-description" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required></textarea>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+                        <input type="url" id="room-image-url" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Amenities (comma-separated)</label>
+                        <input type="text" id="room-amenities" placeholder="e.g., WiFi, Air Conditioning, TV" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div class="md:col-span-2">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="room-available" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="room-available" class="ml-2 block text-sm text-gray-700">
+                                Room is available for booking
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-end space-x-4">
+                    <button type="button" id="cancel-room" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                        Cancel
+                    </button>
+                    <button type="submit" id="save-room" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                        Save Room
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loading-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-8 text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p class="text-lg">Loading...</p>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

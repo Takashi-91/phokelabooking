@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Phokela Guest House</title>
+    <link href="/css/compiled.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex-shrink-0 flex items-center">
+                        <div class="bg-orange-500 p-2 rounded-lg mr-3">
+                            <i class="fas fa-home text-white text-lg"></i>
+                        </div>
+                        <span class="text-xl font-bold text-gray-900">Phokela Guest House</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Home</a>
+                    <a href="/about.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">About</a>
+                    <a href="/gallery.html" class="text-orange-500 font-medium">Gallery</a>
+                    <a href="/booking.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Book Now</a>
+                    <a href="/admin.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Admin</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-orange-500">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="/" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Home</a>
+                <a href="/about.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">About</a>
+                <a href="/gallery.html" class="block px-3 py-2 text-orange-500 font-medium">Gallery</a>
+                <a href="/booking.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Book Now</a>
+                <a href="/admin.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-20 pb-16 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="mb-6">
+                    <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-images text-white text-2xl"></i>
+                    </div>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Gallery</h1>
+                <p class="text-xl text-gray-300">Take a visual journey through our beautiful guest house and surroundings</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Buttons -->
+    <section class="py-8 bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button class="filter-btn active bg-blue-600 text-white px-6 py-2 rounded-full" data-filter="all">
+                    All
+                </button>
+                <button class="filter-btn bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white px-6 py-2 rounded-full transition" data-filter="rooms">
+                    Rooms
+                </button>
+                <button class="filter-btn bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white px-6 py-2 rounded-full transition" data-filter="amenities">
+                    Amenities
+                </button>
+                <button class="filter-btn bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white px-6 py-2 rounded-full transition" data-filter="surroundings">
+                    Surroundings
+                </button>
+                <button class="filter-btn bg-gray-200 text-gray-700 hover:bg-blue-600 hover:text-white px-6 py-2 rounded-full transition" data-filter="dining">
+                    Dining
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Grid -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="gallery-grid">
+                <!-- Room Images -->
+                <div class="gallery-item rooms" data-category="rooms">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=800&h=600" 
+                             alt="Standard Double Room" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Standard Double Room</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item rooms" data-category="rooms">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&h=600" 
+                             alt="Deluxe Suite" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Deluxe Suite</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item rooms" data-category="rooms">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&h=600" 
+                             alt="Family Room" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Family Room</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item rooms" data-category="rooms">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&h=600" 
+                             alt="Executive Suite" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Executive Suite</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amenities Images -->
+                <div class="gallery-item amenities" data-category="amenities">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&h=600" 
+                             alt="Swimming Pool" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Swimming Pool</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item amenities" data-category="amenities">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&h=600" 
+                             alt="Spa & Wellness" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Spa & Wellness</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item amenities" data-category="amenities">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&h=600" 
+                             alt="Fitness Center" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Fitness Center</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item amenities" data-category="amenities">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&h=600" 
+                             alt="Garden Terrace" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Garden Terrace</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Surroundings Images -->
+                <div class="gallery-item surroundings" data-category="surroundings">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1506905925346-14bda5d4c4a3?auto=format&fit=crop&w=800&h=600" 
+                             alt="Mountain Views" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Mountain Views</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item surroundings" data-category="surroundings">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&h=600" 
+                             alt="Forest Trails" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Forest Trails</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item surroundings" data-category="surroundings">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1506905925346-14bda5d4c4a3?auto=format&fit=crop&w=800&h=600" 
+                             alt="Sunset Views" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Sunset Views</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item surroundings" data-category="surroundings">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1506905925346-14bda5d4c4a3?auto=format&fit=crop&w=800&h=600" 
+                             alt="Wildlife Spotting" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Wildlife Spotting</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dining Images -->
+                <div class="gallery-item dining" data-category="dining">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&h=600" 
+                             alt="Restaurant" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Main Restaurant</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item dining" data-category="dining">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=800&h=600" 
+                             alt="Outdoor Dining" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Outdoor Dining</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item dining" data-category="dining">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&h=600" 
+                             alt="Breakfast Buffet" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Breakfast Buffet</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-item dining" data-category="dining">
+                    <div class="relative group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=800&h=600" 
+                             alt="Wine Bar" 
+                             class="w-full h-64 object-cover rounded-lg shadow-lg">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-search-plus text-white text-2xl opacity-0 group-hover:opacity-100 transition duration-300"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 rounded-b-lg">
+                            <h3 class="text-white font-semibold">Wine Bar</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 bg-blue-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold mb-4">Ready to Experience This Beauty?</h2>
+            <p class="text-xl mb-8">Book your stay and create your own memories at Phokela Guest House</p>
+            <a href="/booking.html" class="bg-white text-blue-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg text-lg transition duration-300">
+                Book Your Stay
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Phokela Guest House</h3>
+                    <p class="text-gray-400">Your home away from home in the beautiful mountains of South Africa.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="/about.html" class="text-gray-400 hover:text-white transition">About</a></li>
+                        <li><a href="/gallery.html" class="text-gray-400 hover:text-white transition">Gallery</a></li>
+                        <li><a href="/booking.html" class="text-gray-400 hover:text-white transition">Book Now</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400">Room Service</li>
+                        <li class="text-gray-400">Concierge</li>
+                        <li class="text-gray-400">Free WiFi</li>
+                        <li class="text-gray-400">Parking</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400">+27 12 345 6789</li>
+                        <li class="text-gray-400">info@phokelaguesthouse.co.za</li>
+                        <li class="text-gray-400">123 Mountain View Road</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 Phokela Guest House. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/gallery.js"></script>
+</body>
+</html>

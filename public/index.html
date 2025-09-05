@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phokela Guest House - Your Home Away From Home</title>
+    <link href="/css/compiled.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-bg {
+            background: linear-gradient(rgba(111, 75, 39, 0.8), rgba(143, 115, 87, 0.8)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&h=1080');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .logo-text {
+            background: linear-gradient(135deg, #edc06f 0%, #f3d59f 50%, #f5dcaf 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex-shrink-0 flex items-center">
+                        <div class="rounded-lg mr-3">
+                            <img class="w-10 h-10" src="/images//logo.2.png" loading="lazy" alt="Phokela Guest House">
+                        </div>
+                        <span class="text-xl font-bold text-gray-900">Phokela Guest House</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-orange-500 font-medium">Home</a>
+                    <a href="#our-story" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">About</a>
+                    <a href="/gallery.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Gallery</a>
+                    <a href="/booking.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Book Now</a>
+                    <a href="/admin.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Admin</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-orange-500">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="/" class="block px-3 py-2 text-orange-500 font-medium">Home</a>
+                <a href="/about.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">About</a>
+                <a href="/gallery.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Gallery</a>
+                <a href="/booking.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Book Now</a>
+                <a href="/admin.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="/images//hero-bg3.jpg" 
+                 alt="Phokela Guest House" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/50"></div>
+        </div>
+        
+        <!-- Content -->
+        <div class="relative z-10 h-full flex items-center">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="max-w-3xl">
+                    <div class="mb-8">
+                        <!-- Icon -->
+                        <div class="mb-6">
+                            <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center">
+                                <img class="w-10 h-10" src="/images//logo.2.png" loading="lazy" alt="Phokela Guest House">
+                            </div>
+                        </div>
+                        
+                        <!-- Main Heading -->
+                        <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+                            Welcome to <span class="text-orange-400">Phokela</span><br>
+                            Guest House
+                        </h1>
+                        
+                        <!-- Subtitle -->
+                        <p class="text-xl md:text-2xl text-gray-200 mb-8 leading-relaxed">
+                            Experience authentic South African hospitality in the heart of nature
+                        </p>
+                    </div>
+                    
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="/booking.html" 
+                           class="inline-flex items-center justify-center px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-300 text-lg">
+                            <i class="fas fa-calendar-check mr-3"></i>
+                            Book Your Stay
+                        </a>
+                        <a href="/gallery.html" 
+                           class="inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/30 transition-colors duration-300 text-lg">
+                            <i class="fas fa-images mr-3"></i>
+                            View Rooms
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Why Choose Phokela?</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">We provide exceptional service and comfort for all our guests, creating unforgettable memories in the heart of nature</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center group">
+                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-200 transition-colors duration-300">
+                        <i class="fas fa-bed text-2xl text-orange-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Comfortable Rooms</h3>
+                    <p class="text-gray-600 leading-relaxed">Spacious, well-appointed rooms with modern amenities and stunning mountain views that will take your breath away</p>
+                </div>
+                <div class="text-center group">
+                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-200 transition-colors duration-300">
+                        <i class="fas fa-utensils text-2xl text-orange-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Delicious Meals</h3>
+                    <p class="text-gray-600 leading-relaxed">Fresh, locally-sourced ingredients prepared by our expert chefs, offering a culinary journey through South African flavors</p>
+                </div>
+                <div class="text-center group">
+                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-200 transition-colors duration-300">
+                        <i class="fas fa-concierge-bell text-2xl text-orange-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">24/7 Service</h3>
+                    <p class="text-gray-600 leading-relaxed">Round-the-clock concierge service to make your stay memorable, with personalized attention to every detail</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rooms Preview -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Rooms</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Choose from our selection of carefully designed rooms, each offering comfort and authentic South African charm</p>
+            </div>
+            <div id="rooms-preview" class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Rooms will be loaded dynamically -->
+            </div>
+            <div class="text-center mt-12">
+                <a href="/booking.html" class="inline-flex items-center justify-center px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-300 text-lg">
+                    <i class="fas fa-search mr-3"></i>
+                    View All Rooms & Book
+                </a>
+            </div>
+        </div>
+    </section>
+    <section id="our-story" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        Founded in 2010, Phokela Guest House began as a dream to create a sanctuary where travelers could experience the natural beauty of South Africa while enjoying world-class hospitality. What started as a small family-run establishment has grown into a premier destination that welcomes guests from around the world.
+                    </p>
+                    <p class="text-lg text-gray-600 mb-6">
+                        Our name "Phokela" means "to rest" in the local language, and that's exactly what we provide - a peaceful retreat where you can unwind, recharge, and create lasting memories. Nestled in the heart of the mountains, our guest house offers breathtaking views and a tranquil atmosphere that's perfect for both relaxation and adventure.
+                    </p>
+                    <p class="text-lg text-gray-600">
+                        Today, we continue to uphold the values of family, community, and exceptional service that have been our foundation since day one. Every guest who walks through our doors becomes part of the Phokela family.
+                    </p>
+                </div>
+                <div>
+                    <img src="images/hero-bg3.jpg" 
+                        loading="lazy"
+                         alt="Phokela Guest House exterior" 
+                         class="rounded-lg shadow-xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <!-- Location -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-900 mb-6">Our Location</h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        Phokela Guest House is strategically located in the heart of the Drakensberg Mountains, offering easy access to some of South Africa's most spectacular natural attractions. Our prime location provides the perfect balance of seclusion and convenience.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-mountain text-blue-600 mr-3"></i>
+                            <span class="text-gray-700">5 minutes from Drakensberg National Park</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-plane text-blue-600 mr-3"></i>
+                            <span class="text-gray-700">2 hours from King Shaka International Airport</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-car text-blue-600 mr-3"></i>
+                            <span class="text-gray-700">Free parking available on-site</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-wifi text-blue-600 mr-3"></i>
+                            <span class="text-gray-700">Complimentary high-speed WiFi throughout</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <div class="bg-gray-300 h-96 rounded-lg overflow-hidden">
+                            <iframe
+                              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2391.425949389787!2d28.999310237793818!3d-24.18284265949144!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ec0b5096558c717%3A0xb519fe43b4d04397!2sPhokela%20Guest%20House!5e0!3m2!1sen!2sza!4v1757076341597!5m2!1sen!2sza"
+                              width="100%"
+                              height="100%"
+                              style="border:0;"
+                              allowfullscreen=""
+                              loading="lazy"
+                              referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                          </div>
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Our Values -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Values</h2>
+                <p class="text-xl text-gray-600">The principles that guide everything we do</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-heart text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-center">Hospitality</h3>
+                    <p class="text-gray-600 text-center">We treat every guest like family, ensuring their comfort and satisfaction is our top priority.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-leaf text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-center">Sustainability</h3>
+                    <p class="text-gray-600 text-center">We're committed to protecting our beautiful environment through eco-friendly practices and local partnerships.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-star text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-center">Excellence</h3>
+                    <p class="text-gray-600 text-center">We continuously strive to exceed expectations and provide exceptional experiences for all our guests.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 bg-blue-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold mb-4">Ready to Experience Phokela?</h2>
+            <p class="text-xl mb-8">Book your stay today and discover why our guests keep coming back</p>
+            <a href="/booking.html" class="bg-white text-blue-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg text-lg transition duration-300">
+                Book Your Stay
+            </a>
+        </div>
+    </section>
+
+    <!-- Contact Info -->
+    <section class="py-20 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Get In Touch</h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">We'd love to hear from you and help plan your perfect stay at Phokela Guest House</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center group">
+                    <div class="bg-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-600 transition-colors duration-300">
+                        <i class="fas fa-map-marker-alt text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Location</h3>
+                    <p class="text-gray-300 leading-relaxed">123 Mountain View Road<br>Phokela, South Africa</p>
+                </div>
+                <div class="text-center group">
+                    <div class="bg-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-600 transition-colors duration-300">
+                        <i class="fas fa-phone text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Phone</h3>
+                    <p class="text-gray-300 leading-relaxed">+27 12 345 6789<br>+27 87 654 3210</p>
+                </div>
+                <div class="text-center group">
+                    <div class="bg-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-600 transition-colors duration-300">
+                        <i class="fas fa-envelope text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Email</h3>
+                    <p class="text-gray-300 leading-relaxed">info@phokelaguesthouse.co.za<br>bookings@phokelaguesthouse.co.za</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-orange-500 p-3 rounded-lg mr-4">
+                            <i class="fas fa-home text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">Phokela Guest House</h3>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed mb-6">Your home away from home in the beautiful mountains of South Africa. Experience luxury, comfort, and unforgettable memories.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-gray-800 hover:bg-gray-700 p-3 rounded-lg transition-colors duration-300">
+                            <i class="fab fa-facebook text-white"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-gray-700 p-3 rounded-lg transition-colors duration-300">
+                            <i class="fab fa-instagram text-white"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-gray-700 p-3 rounded-lg transition-colors duration-300">
+                            <i class="fab fa-twitter text-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/" class="text-gray-300 hover:text-white transition-colors duration-300">Home</a></li>
+                        <li><a href="/about.html" class="text-gray-300 hover:text-white transition-colors duration-300">About</a></li>
+                        <li><a href="/gallery.html" class="text-gray-300 hover:text-white transition-colors duration-300">Gallery</a></li>
+                        <li><a href="/booking.html" class="text-gray-300 hover:text-white transition-colors duration-300">Book Now</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Services</h4>
+                    <ul class="space-y-3">
+                        <li class="text-gray-300">Room Service</li>
+                        <li class="text-gray-300">Concierge</li>
+                        <li class="text-gray-300">Free WiFi</li>
+                        <li class="text-gray-300">Parking</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 Phokela Guest House. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/home.js"></script>
+</body>
+</html>
