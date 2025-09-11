@@ -1,7 +1,8 @@
 // Admin panel functionality
 
 let currentAdmin = null;
-let rooms = [];
+let roomTypes = [];
+let roomUnits = [];
 let bookings = [];
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -22,7 +23,31 @@ function setupEventListeners() {
         logoutBtn.addEventListener('click', handleLogout);
     }
 
-    // Room management
+    // Tab switching
+    const roomTypesTab = document.getElementById('room-types-tab');
+    if (roomTypesTab) {
+        roomTypesTab.addEventListener('click', 
+            () => switchTab('room-types'));
+    }
+
+    const roomUnitsTab = document.getElementById('room-units-tab');
+    if (roomUnitsTab) {
+        roomUnitsTab.addEventListener('click', () => switchTab('room-units'));
+    }
+
+    // Room type management
+    const addRoomTypeBtn = document.getElementById('add-room-type-btn');
+    if (addRoomTypeBtn) {
+        addRoomTypeBtn.addEventListener('click', showRoomTypeModal);
+    }
+
+    // Room unit management
+    const addRoomUnitBtn = document.getElementById('add-room-unit-btn');
+    if (addRoomUnitBtn) {
+        addRoomUnitBtn.addEventListener('click', showRoomUnitModal);
+    }
+
+    // Room management (legacy)
     const addRoomBtn = document.getElementById('add-room-btn');
     if (addRoomBtn) {
         addRoomBtn.addEventListener('click', showAddRoomModal);
@@ -134,68 +159,346 @@ async function loadStats() {
     }
 }
 
-async function loadRooms() {
-    try {
-        rooms = await api.getRooms();
-        displayRooms();
-    } catch (error) {
-        console.error('Failed to load rooms:', error);
+// Tab switching functionality
+function switchTab(tabName) {
+    // Update tab buttons
+    document.querySelectorAll('[id$="-tab"]').forEach(tab => {
+        tab.classList.remove('border-blue-500', 'text-blue-600');
+        tab.classList.add('border-transparent', 'text-gray-500');
+    });
+    
+    document.getElementById(`${tabName}-tab`).classList.add('border-blue-500', 'text-blue-600');
+    document.getElementById(`${tabName}-tab`).classList.remove('border-transparent', 'text-gray-500');
+    
+    // Show/hide sections
+    document.getElementById('room-types-section').classList.toggle('hidden', tabName !== 'room-types');
+    document.getElementById('room-units-section').classList.toggle('hidden', tabName !== 'room-units');
+    
+    // Load data for the selected tab
+    if (tabName === 'room-types') {
+        loadRoomTypes();
+    } else if (tabName === 'room-units') {
+        loadRoomUnits();
     }
 }
 
-function displayRooms() {
-    const roomsTable = document.getElementById('rooms-table');
-    if (!roomsTable) return;
+async function loadRoomTypes() {
+    try {
+        roomTypes = await api.getAdminRoomTypes();
+        displayRoomTypes();
+    } catch (error) {
+        console.error('Failed to load room types:', error);
+    }
+}
 
-    if (rooms.length === 0) {
-        roomsTable.innerHTML = '<p class="text-gray-500 text-center py-8">No rooms found.</p>';
+async function loadRoomUnits() {
+    try {
+        roomUnits = await api.getAdminRoomUnits();
+        displayRoomUnits();
+    } catch (error) {
+        console.error('Failed to load room units:', error);
+    }
+}
+
+// Legacy support
+async function loadRooms() {
+    await loadRoomTypes();
+}
+
+function displayRoomTypes() {
+    const roomTypesTable = document.getElementById('room-types-table');
+    if (!roomTypesTable) return;
+
+    if (roomTypes.length === 0) {
+        roomTypesTable.innerHTML = '<p class="text-gray-500 text-center py-8">No room types found.</p>';
         return;
     }
 
-    roomsTable.innerHTML = `
+    roomTypesTable.innerHTML = `
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room Type</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Guests</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Units</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                ${rooms.map(room => `
+                ${roomTypes.map(roomType => `
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                <img class="h-10 w-10 rounded-lg object-cover" src="${room.imageUrl || 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=100&h=100'}" alt="${room.name}">
+                                <img class="h-10 w-10 rounded-lg object-cover" src="${roomType.images && roomType.images[0] || 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=100&h=100'}" alt="${roomType.name}">
                                 <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900">${room.name}</div>
-                                    <div class="text-sm text-gray-500">${room.description.substring(0, 50)}...</div>
+                                    <div class="text-sm font-medium text-gray-900">${roomType.name}</div>
+                                    <div class="text-sm text-gray-500">${roomType.type}</div>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${room.type}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${utils.formatCurrency(room.price)}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${room.maxGuests}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${utils.formatCurrency(roomType.price)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${roomType.maxGuests}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${roomType.availableUnits || 0}/${roomType.totalUnits || 0}
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${room.isAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                                ${room.isAvailable ? 'Available' : 'Unavailable'}
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${roomType.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${roomType.isActive ? 'Active' : 'Inactive'}
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                            <button onclick="editRoom('${room._id}')" class="text-blue-600 hover:text-blue-900">Edit</button>
-                            <button onclick="toggleRoomAvailability('${room._id}', ${room.isAvailable})" class="text-yellow-600 hover:text-yellow-900">
-                                ${room.isAvailable ? 'Disable' : 'Enable'}
+                            <button onclick="editRoomType('${roomType._id}')" class="text-blue-600 hover:text-blue-900">Edit</button>
+                            <button onclick="toggleRoomTypeStatus('${roomType._id}', ${roomType.isActive})" class="text-yellow-600 hover:text-yellow-900">
+                                ${roomType.isActive ? 'Deactivate' : 'Activate'}
                             </button>
-                            <button onclick="deleteRoom('${room._id}')" class="text-red-600 hover:text-red-900">Delete</button>
                         </td>
                     </tr>
                 `).join('')}
             </tbody>
         </table>
     `;
+}
+
+function displayRoomUnits() {
+    const roomUnitsTable = document.getElementById('room-units-table');
+    if (!roomUnitsTable) return;
+
+    if (roomUnits.length === 0) {
+        roomUnitsTable.innerHTML = '<p class="text-gray-500 text-center py-8">No room units found.</p>';
+        return;
+    }
+
+    roomUnitsTable.innerHTML = `
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Room Type</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Floor</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                ${roomUnits.map(unit => `
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">${unit.unitName || unit.unitNumber}</div>
+                            <div class="text-sm text-gray-500">${unit.unitNumber}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${unit.roomTypeId?.name || 'N/A'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${unit.floor || 'N/A'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getUnitStatusColor(unit.status)}">
+                                ${unit.status}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button onclick="editRoomUnit('${unit._id}')" class="text-blue-600 hover:text-blue-900">Edit</button>
+                            <button onclick="toggleUnitStatus('${unit._id}', '${unit.status}')" class="text-yellow-600 hover:text-yellow-900">
+                                Toggle Status
+                            </button>
+                        </td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+}
+
+function getUnitStatusColor(status) {
+    const colors = {
+        'available': 'bg-green-100 text-green-800',
+        'occupied': 'bg-blue-100 text-blue-800',
+        'maintenance': 'bg-yellow-100 text-yellow-800',
+        'out-of-order': 'bg-red-100 text-red-800',
+        'cleaning': 'bg-purple-100 text-purple-800'
+    };
+    return colors[status] || 'bg-gray-100 text-gray-800';
+}
+
+// Legacy support
+function displayRooms() {
+    displayRoomTypes();
+}
+
+// Room type management functions
+function showRoomTypeModal() {
+    // Create a simple modal for room type creation
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-semibold mb-4">Add Room Type</h3>
+            <form id="room-type-form">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                    <input type="text" id="room-type-name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Type</label>
+                    <input type="text" id="room-type-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea id="room-type-description" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Price</label>
+                    <input type="number" id="room-type-price" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" step="0.01" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Max Guests</label>
+                    <input type="number" id="room-type-guests" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" min="1" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Total Units</label>
+                    <input type="number" id="room-type-units" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" min="1" value="1" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Amenities (comma-separated)</label>
+                    <input type="text" id="room-type-amenities" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="WiFi, TV, Air Conditioning">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Create</button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Handle form submission
+    document.getElementById('room-type-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await createRoomType();
+    });
+}
+
+function showRoomUnitModal() {
+    // Create a simple modal for room unit creation
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-semibold mb-4">Add Room Unit</h3>
+            <form id="room-unit-form">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Room Type</label>
+                    <select id="room-unit-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <option value="">Select Room Type</option>
+                        ${roomTypes.map(rt => `<option value="${rt._id}">${rt.name}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Unit Number</label>
+                    <input type="text" id="room-unit-number" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Floor</label>
+                    <input type="number" id="room-unit-floor" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" min="1">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Special Features (comma-separated)</label>
+                    <input type="text" id="room-unit-features" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="accessible, smoking, mountain-view">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                    <textarea id="room-unit-notes" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Create</button>
+                </div>
+            </form>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Handle form submission
+    document.getElementById('room-unit-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await createRoomUnit();
+    });
+}
+
+async function createRoomType() {
+    try {
+        const formData = {
+            name: document.getElementById('room-type-name').value,
+            type: document.getElementById('room-type-type').value,
+            description: document.getElementById('room-type-description').value,
+            price: document.getElementById('room-type-price').value,
+            maxGuests: parseInt(document.getElementById('room-type-guests').value),
+            totalUnits: parseInt(document.getElementById('room-type-units').value),
+            amenities: document.getElementById('room-type-amenities').value.split(',').map(a => a.trim()).filter(a => a)
+        };
+        
+        const response = await api.createRoomType(formData);
+        console.log('Room type created:', response);
+        closeModal();
+        loadRoomTypes(); // Refresh the list
+        utils.showSuccess('Room type created successfully!');
+    } catch (error) {
+        console.error('Failed to create room type:', error);
+        utils.showError('Failed to create room type. Please try again.');
+    }
+}
+
+async function createRoomUnit() {
+    try {
+        const roomTypeId = document.getElementById('room-unit-type').value;
+        const formData = {
+            unitNumber: document.getElementById('room-unit-number').value,
+            floor: parseInt(document.getElementById('room-unit-floor').value) || undefined,
+            specialFeatures: document.getElementById('room-unit-features').value.split(',').map(f => f.trim()).filter(f => f),
+            notes: document.getElementById('room-unit-notes').value
+        };
+        
+        const response = await api.createRoomUnit(roomTypeId, formData);
+        console.log('Room unit created:', response);
+        closeModal();
+        loadRoomUnits(); // Refresh the list
+        utils.showSuccess('Room unit created successfully!');
+    } catch (error) {
+        console.error('Failed to create room unit:', error);
+        utils.showError('Failed to create room unit. Please try again.');
+    }
+}
+
+function closeModal() {
+    const modal = document.querySelector('.fixed.inset-0');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+function editRoomType(roomTypeId) {
+    // Implementation for editing room type
+    console.log('Edit room type:', roomTypeId);
+    // TODO: Implement edit functionality
+}
+
+function toggleRoomTypeStatus(roomTypeId, currentStatus) {
+    // Implementation for toggling room type status
+    console.log('Toggle room type status:', roomTypeId, currentStatus);
+    // TODO: Implement status toggle
+}
+
+function editRoomUnit(unitId) {
+    // Implementation for editing room unit
+    console.log('Edit room unit:', unitId);
+    // TODO: Implement edit functionality
+}
+
+function toggleUnitStatus(unitId, currentStatus) {
+    // Implementation for toggling unit status
+    console.log('Toggle unit status:', unitId, currentStatus);
+    // TODO: Implement status toggle
 }
 
 async function loadBookings() {
@@ -429,3 +732,4 @@ async function updateBookingStatus(bookingId, status) {
         utils.hideLoading();
     }
 }
+

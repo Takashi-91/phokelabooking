@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 const BookingSchema = new Schema({
   userId: { type: String },
-  roomId: { type: Schema.Types.ObjectId, ref: 'Room', required: true },
+  roomUnitId: { type: Schema.Types.ObjectId, ref: 'RoomUnit', required: true },
+  roomTypeId: { type: Schema.Types.ObjectId, ref: 'RoomType', required: true }, // For easier queries
   guestName: { type: String, required: true },
   guestEmail: { type: String, required: true },
   guestPhone: { type: String, required: true },
@@ -27,6 +28,26 @@ const BookingSchema = new Schema({
   discountCode: { type: String },
   discountAmount: { type: Number, default: 0 },
   taxes: { type: Number, default: 0 },
-  fees: { type: Number, default: 0 }
+  fees: { type: Number, default: 0 },
+  // Room unit information (cached for performance)
+  roomUnitNumber: { type: String }, // e.g., "101"
+  roomTypeName: { type: String }, // e.g., "Deluxe Room"
+  // Check-in/out tracking
+  actualCheckinTime: { type: Date },
+  actualCheckoutTime: { type: Date },
+  // Guest preferences
+  guestPreferences: {
+    smoking: { type: Boolean, default: false },
+    accessibility: { type: Boolean, default: false },
+    floor: { type: String }, // Preferred floor
+    view: { type: String } // Preferred view
+  }
 }, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } });
+
+// Indexes for efficient queries
+BookingSchema.index({ roomUnitId: 1, checkinDate: 1, checkoutDate: 1 });
+BookingSchema.index({ roomTypeId: 1, checkinDate: 1, checkoutDate: 1 });
+BookingSchema.index({ guestEmail: 1 });
+BookingSchema.index({ bookingReference: 1 });
+BookingSchema.index({ status: 1, paymentStatus: 1 });
 export default mongoose.model('Booking', BookingSchema);

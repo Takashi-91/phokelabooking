@@ -132,22 +132,43 @@ const api = {
     },
     
 
-    // Get rooms
-    getRooms: function() {
-        return this.request('/rooms');
+    // Get room types (replaces getRooms)
+    getRoomTypes: function() {
+        return this.request('/room-types');
     },
 
-    // Get room by ID
-    getRoom: function(id) {
-        return this.request(`/rooms/${id}`);
+    // Get room type by ID
+    getRoomType: function(id) {
+        return this.request(`/room-types/${id}`);
     },
 
-    // Check room availability
-    checkAvailability: function(roomId, checkinDate, checkoutDate) {
-        return this.request(`/rooms/${roomId}/check-availability`, {
+    // Check room type availability
+    checkRoomTypeAvailability: function(roomTypeId, checkinDate, checkoutDate, numberOfGuests = 1) {
+        return this.request(`/room-types/${roomTypeId}/check-availability`, {
+            method: 'POST',
+            body: JSON.stringify({ checkinDate, checkoutDate, numberOfGuests })
+        });
+    },
+
+    // Get available room units for a room type
+    getAvailableUnits: function(roomTypeId, checkinDate, checkoutDate) {
+        return this.request(`/room-types/${roomTypeId}/available-units`, {
             method: 'POST',
             body: JSON.stringify({ checkinDate, checkoutDate })
         });
+    },
+
+    // Legacy support - redirect to room types
+    getRooms: function() {
+        return this.getRoomTypes();
+    },
+
+    getRoom: function(id) {
+        return this.getRoomType(id);
+    },
+
+    checkAvailability: function(roomId, checkinDate, checkoutDate) {
+        return this.checkRoomTypeAvailability(roomId, checkinDate, checkoutDate);
     },
 
     // Create booking
@@ -156,6 +177,19 @@ const api = {
             method: 'POST',
             body: JSON.stringify(bookingData)
         });
+    },
+
+    // Verify payment
+    verifyPayment: function(paymentData) {
+        return this.request('/payments/verify', {
+            method: 'POST',
+            body: JSON.stringify(paymentData)
+        });
+    },
+
+    // Get payment config
+    getPaymentConfig: function() {
+        return this.request('/payments/config');
     },
 
     // Get bookings
@@ -180,6 +214,52 @@ const api = {
     adminLogout: function() {
         return this.request('/admin/logout', {
             method: 'POST'
+        });
+    },
+
+    // Room type management
+    getRoomTypes: function() {
+        return this.request('/room-types');
+    },
+
+    getAdminRoomTypes: function() {
+        return this.request('/admin/room-types');
+    },
+
+    createRoomType: function(roomTypeData) {
+        return this.request('/admin/room-types', {
+            method: 'POST',
+            body: JSON.stringify(roomTypeData)
+        });
+    },
+
+    updateRoomType: function(id, roomTypeData) {
+        return this.request(`/admin/room-types/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(roomTypeData)
+        });
+    },
+
+    // Room unit management
+    getRoomUnits: function() {
+        return this.request('/admin/room-units');
+    },
+
+    getAdminRoomUnits: function() {
+        return this.request('/admin/room-units');
+    },
+
+    createRoomUnit: function(roomTypeId, unitData) {
+        return this.request(`/admin/room-types/${roomTypeId}/units`, {
+            method: 'POST',
+            body: JSON.stringify(unitData)
+        });
+    },
+
+    updateRoomUnit: function(id, unitData) {
+        return this.request(`/admin/room-units/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(unitData)
         });
     },
 
@@ -233,21 +313,76 @@ const api = {
     }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+// Navigation highlighting system
+const navigation = {
+    // Initialize navigation highlighting
+    init: function() {
+        this.highlightCurrentPage();
+        this.highlightCurrentSection();
+    },
+
+    // Highlight current page in navigation
+    highlightCurrentPage: function() {
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('nav a[href]');
+        
+        // Remove active classes from all nav links
+        navLinks.forEach(link => {
+            link.classList.remove('text-orange-500', 'font-medium');
+            link.classList.add('text-gray-700', 'hover:text-orange-500');
+        });
+
+        // Find and highlight the current page link
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            
+            // Handle exact page matches
+            if (href === currentPath) {
+                link.classList.remove('text-gray-700', 'hover:text-orange-500');
+                link.classList.add('text-orange-500', 'font-medium');
+            }
+            // Handle home page (/) matches
+            else if (currentPath === '/' && (href === '/' || href === '/index.html')) {
+                link.classList.remove('text-gray-700', 'hover:text-orange-500');
+                link.classList.add('text-orange-500', 'font-medium');
+            }
+            // Handle about page with section links
+            else if (currentPath === '/about' && href === '#our-story') {
+                // Don't highlight about section link if we're on a different page
+            }
+        });
+    },
+
+    // Highlight current section (for single-page navigation)
+    highlightCurrentSection: function() {
     const sections = document.querySelectorAll("section[id]");
     const navLinks = document.querySelectorAll("nav a[href^='#']");
+        
+        if (sections.length === 0 || navLinks.length === 0) return;
   
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Remove "active" from all links
-            navLinks.forEach((link) => link.classList.remove("text-orange-500"));
+                        // Only update if we're on the same page as the section
+                        const currentPath = window.location.pathname;
+                        const isHomePage = currentPath === '/' || currentPath === '/index.html';
+                        
+                        if (isHomePage) {
+                            // Remove active from all section links
+                            navLinks.forEach((link) => {
+                                if (link.getAttribute('href').startsWith('#')) {
+                                    link.classList.remove("text-orange-500", "font-medium");
+                                    link.classList.add("text-gray-700", "hover:text-orange-500");
+                                }
+                            });
   
             // Highlight the matching nav link
             const activeLink = document.querySelector(`nav a[href="#${entry.target.id}"]`);
             if (activeLink) {
-              activeLink.classList.add("text-orange-500");
+                                activeLink.classList.remove("text-gray-700", "hover:text-orange-500");
+                                activeLink.classList.add("text-orange-500", "font-medium");
+                            }
             }
           }
         });
@@ -256,6 +391,12 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   
     sections.forEach((section) => observer.observe(section));
+    }
+};
+
+// Initialize navigation when DOM is loaded
+document.addEventListener("DOMContentLoaded", () => {
+    navigation.init();
   });
   
 // Close modal event listeners

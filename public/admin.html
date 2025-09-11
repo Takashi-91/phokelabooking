@@ -19,11 +19,11 @@
                     </a>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="/" class="text-gray-700 hover:text-blue-600 transition">Home</a>
-                    <a href="/about.html" class="text-gray-700 hover:text-blue-600 transition">About</a>
-                    <a href="/gallery.html" class="text-gray-700 hover:text-blue-600 transition">Gallery</a>
-                    <a href="/booking.html" class="text-gray-700 hover:text-blue-600 transition">Book Now</a>
-                    <a href="/admin.html" class="text-blue-600 font-medium">Admin</a>
+                    <a href="/" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Home</a>
+                    <a href="/about.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">About</a>
+                    <a href="/gallery.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Gallery</a>
+                    <a href="/booking.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Book Now</a>
+                    <a href="/admin.html" class="text-orange-500 font-medium">Admin</a>
                 </div>
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-600">
@@ -35,11 +35,11 @@
         <!-- Mobile menu -->
         <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="/" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Home</a>
-                <a href="/about.html" class="block px-3 py-2 text-gray-700 hover:text-blue-600">About</a>
-                <a href="/gallery.html" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Gallery</a>
-                <a href="/booking.html" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Book Now</a>
-                <a href="/admin.html" class="block px-3 py-2 text-blue-600 font-medium">Admin</a>
+                <a href="/" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Home</a>
+                <a href="/about.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">About</a>
+                <a href="/gallery.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Gallery</a>
+                <a href="/booking.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Book Now</a>
+                <a href="/admin.html" class="block px-3 py-2 text-orange-500 font-medium">Admin</a>
             </div>
         </div>
     </nav>
@@ -151,18 +151,47 @@
         <!-- Main Content -->
         <section class="py-8">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Tabs for Room Management -->
+                <div class="mb-6">
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-8">
+                            <button id="room-types-tab" class="whitespace-nowrap py-2 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600">
+                                Room Types
+                            </button>
+                            <button id="room-units-tab" class="whitespace-nowrap py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                                Room Units
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+
                 <div class="grid lg:grid-cols-3 gap-8">
-                    <!-- Rooms Management -->
-                    <div class="lg:col-span-2">
+                    <!-- Room Types Management -->
+                    <div id="room-types-section" class="lg:col-span-2">
                         <div class="bg-white rounded-lg shadow-lg p-6">
                             <div class="flex justify-between items-center mb-6">
-                                <h2 class="text-2xl font-bold text-gray-900">Rooms Management</h2>
-                                <button id="add-room-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
-                                    <i class="fas fa-plus mr-2"></i>Add Room
+                                <h2 class="text-2xl font-bold text-gray-900">Room Types Management</h2>
+                                <button id="add-room-type-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                                    <i class="fas fa-plus mr-2"></i>Add Room Type
                                 </button>
                             </div>
-                            <div id="rooms-table" class="overflow-x-auto">
-                                <!-- Rooms table will be loaded here -->
+                            <div id="room-types-table" class="overflow-x-auto">
+                                <!-- Room types table will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Room Units Management -->
+                    <div id="room-units-section" class="lg:col-span-2 hidden">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold text-gray-900">Room Units Management</h2>
+                                <button id="add-room-unit-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                                    <i class="fas fa-plus mr-2"></i>Add Room Unit
+                                </button>
+                            </div>
+                            <div id="room-units-table" class="overflow-x-auto">
+                                <!-- Room units table will be loaded here -->
                             </div>
                         </div>
                     </div>

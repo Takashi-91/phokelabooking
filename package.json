@@ -5,7 +5,8 @@
   "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"nodemon src/server.js\" \"tailwindcss -i ./public/css/style.css -o ./public/css/compiled.css --watch\"",
+    "dev": "concurrently \"nodemon src/server.js\" \"tailwindcss -i ./public/css/style.css -o ./public/css/compiled.css --watch\" \"browser-sync start --proxy localhost:3000 --files 'public/**/*.html, public/**/*.css, public/**/*.js'\"",
+    "dev-frontend": "browser-sync start --server public --files 'public/**/*.html, public/**/*.css, public/**/*.js'",
     "start": "node src/server.js",
     "lint": "eslint .",
     "build-css": "tailwindcss -i ./public/css/style.css -o ./public/css/compiled.css --watch",
@@ -27,11 +28,13 @@
     "morgan": "^1.10.0",
     "nanoid": "^5.0.7",
     "nodemailer": "^6.9.7",
+    "paystack": "^2.0.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
+    "browser-sync": "^3.0.4",
     "concurrently": "^9.2.1",
     "eslint": "^9.7.0",
     "nodemon": "^3.0.2",

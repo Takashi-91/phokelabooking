@@ -22,6 +22,214 @@
         .text-shadow {
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
+
+        /* Framer Motion-style animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .fade-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .slide-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-children > * {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stagger-children.visible > * {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-children.visible > *:nth-child(1) { transition-delay: 0.1s; }
+        .stagger-children.visible > *:nth-child(2) { transition-delay: 0.2s; }
+        .stagger-children.visible > *:nth-child(3) { transition-delay: 0.3s; }
+        .stagger-children.visible > *:nth-child(4) { transition-delay: 0.4s; }
+        .stagger-children.visible > *:nth-child(5) { transition-delay: 0.5s; }
+        .stagger-children.visible > *:nth-child(6) { transition-delay: 0.6s; }
+
+        /* Hover animations */
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .hover-scale {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+
+        .hover-glow {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-glow:hover {
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.4);
+        }
+
+        /* Button animations */
+        .btn-animate {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-animate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-animate:hover::before {
+            left: 100%;
+        }
+
+        .btn-animate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.4);
+        }
+
+        /* Floating animation */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Pulse animation */
+        .pulse-slow {
+            animation: pulse-slow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Gradient text animation */
+        .gradient-text {
+            background: linear-gradient(135deg, #f97316, #f59e0b, #fbbf24);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Card entrance animation */
+        .card-entrance {
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-entrance.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Text reveal animation */
+        .text-reveal {
+            overflow: hidden;
+        }
+
+        .text-reveal span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .text-reveal.visible span {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Loading animation */
+        .loading-dots {
+            display: inline-block;
+        }
+
+        .loading-dots::after {
+            content: '';
+            animation: loading-dots 1.5s infinite;
+        }
+
+        @keyframes loading-dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
     </style>
 </head>
 <body class="bg-white">
@@ -39,7 +247,7 @@
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="/" class="text-orange-500 font-medium">Home</a>
-                    <a href="#our-story" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">About</a>
+                    <a href="#about" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">About</a>
                     <a href="/gallery.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Gallery</a>
                     <a href="/booking.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Book Now</a>
                     <a href="/admin.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Admin</a>
@@ -55,7 +263,7 @@
         <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
             <div class="px-2 pt-2 pb-3 space-y-1">
                 <a href="/" class="block px-3 py-2 text-orange-500 font-medium">Home</a>
-                <a href="/about.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">About</a>
+                <a href="#about.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">About</a>
                 <a href="/gallery.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Gallery</a>
                 <a href="/booking.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Book Now</a>
                 <a href="/admin.html" class="block px-3 py-2 text-gray-700 hover:text-orange-500">Admin</a>
@@ -79,33 +287,33 @@
                 <div class="max-w-3xl">
                     <div class="mb-8">
                         <!-- Icon -->
-                        <div class="mb-6">
-                            <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center">
+                        <div class="mb-6 scale-in">
+                            <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center floating">
                                 <img class="w-10 h-10" src="/images//logo.2.png" loading="lazy" alt="Phokela Guest House">
                             </div>
                         </div>
                         
                         <!-- Main Heading -->
-                        <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-                            Welcome to <span class="text-orange-400">Phokela</span><br>
+                        <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight fade-in">
+                            Welcome to <span class="text-orange-400 gradient-text">Phokela</span><br>
                             Guest House
                         </h1>
                         
                         <!-- Subtitle -->
-                        <p class="text-xl md:text-2xl text-gray-200 mb-8 leading-relaxed">
+                        <p class="text-xl md:text-2xl text-gray-200 mb-8 leading-relaxed fade-in">
                             Experience authentic South African hospitality in the heart of nature
                         </p>
                     </div>
                     
                     <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex flex-col sm:flex-row gap-4 fade-in">
                         <a href="/booking.html" 
-                           class="inline-flex items-center justify-center px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-300 text-lg">
+                           class="btn-animate inline-flex items-center justify-center px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg text-lg">
                             <i class="fas fa-calendar-check mr-3"></i>
                             Book Your Stay
                         </a>
                         <a href="/gallery.html" 
-                           class="inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/30 transition-colors duration-300 text-lg">
+                           class="btn-animate inline-flex items-center justify-center px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg border border-white/30 text-lg">
                             <i class="fas fa-images mr-3"></i>
                             View Rooms
                         </a>
@@ -118,27 +326,27 @@
     <!-- Features Section -->
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 fade-in">
                 <h2 class="text-4xl font-bold text-gray-900 mb-4">Why Choose Phokela?</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">We provide exceptional service and comfort for all our guests, creating unforgettable memories in the heart of nature</p>
             </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center group">
-                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-200 transition-colors duration-300">
+            <div class="grid md:grid-cols-3 gap-8 stagger-children">
+                <div class="text-center group hover-lift bg-white p-8 ">
+                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-200 transition-colors duration-300 hover-scale">
                         <i class="fas fa-bed text-2xl text-orange-600"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">Comfortable Rooms</h3>
                     <p class="text-gray-600 leading-relaxed">Spacious, well-appointed rooms with modern amenities and stunning mountain views that will take your breath away</p>
                 </div>
-                <div class="text-center group">
-                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-200 transition-colors duration-300">
+                <div class="text-center group hover-lift bg-white p-8 ">
+                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-200 transition-colors duration-300 hover-scale">
                         <i class="fas fa-utensils text-2xl text-orange-600"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">Delicious Meals</h3>
                     <p class="text-gray-600 leading-relaxed">Fresh, locally-sourced ingredients prepared by our expert chefs, offering a culinary journey through South African flavors</p>
                 </div>
-                <div class="text-center group">
-                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-200 transition-colors duration-300">
+                <div class="text-center group hover-lift bg-white p-8 ">
+                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-200 transition-colors duration-300 hover-scale">
                         <i class="fas fa-concierge-bell text-2xl text-orange-600"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">24/7 Service</h3>
@@ -149,51 +357,185 @@
     </section>
 
     <!-- Rooms Preview -->
-    <section class="py-20 bg-gray-50">
+    <section class="py-20 bg-orange-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 fade-in">
                 <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Rooms</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">Choose from our selection of carefully designed rooms, each offering comfort and authentic South African charm</p>
             </div>
-            <div id="rooms-preview" class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div id="rooms-preview" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
                 <!-- Rooms will be loaded dynamically -->
             </div>
-            <div class="text-center mt-12">
-                <a href="/booking.html" class="inline-flex items-center justify-center px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition-colors duration-300 text-lg">
+            <div class="text-center mt-12 fade-in">
+                <a href="/booking.html" class="btn-animate inline-flex items-center justify-center px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg text-lg">
                     <i class="fas fa-search mr-3"></i>
                     View All Rooms & Book
                 </a>
             </div>
         </div>
     </section>
-    <section id="our-story" class="py-20 bg-white">
+    <!-- About Section -->
+    <section id="about" class="pt-5 min-h-screen bg-orange-50">
+        <!-- Main About Section -->
+        <section class="py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h2 class="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
-                    <p class="text-lg text-gray-600 mb-6">
-                        Founded in 2010, Phokela Guest House began as a dream to create a sanctuary where travelers could experience the natural beauty of South Africa while enjoying world-class hospitality. What started as a small family-run establishment has grown into a premier destination that welcomes guests from around the world.
-                    </p>
-                    <p class="text-lg text-gray-600 mb-6">
-                        Our name "Phokela" means "to rest" in the local language, and that's exactly what we provide - a peaceful retreat where you can unwind, recharge, and create lasting memories. Nestled in the heart of the mountains, our guest house offers breathtaking views and a tranquil atmosphere that's perfect for both relaxation and adventure.
-                    </p>
-                    <p class="text-lg text-gray-600">
-                        Today, we continue to uphold the values of family, community, and exceptional service that have been our foundation since day one. Every guest who walks through our doors becomes part of the Phokela family.
-                    </p>
-                </div>
-                <div>
-                    <img src="images/hero-bg3.jpg" 
-                        loading="lazy"
-                         alt="Phokela Guest House exterior" 
-                         class="rounded-lg shadow-xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="fade-in-left">
+                        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                            About <span class="gradient-text">Phokela Guest House</span>
+                        </h1>
+                        <p class="text-lg text-gray-700 mb-6">
+                            Established in 2010, Phokela Guest House has been providing authentic South African hospitality 
+                            for over a decade. Nestled in the heart of the beautiful Limpopo province, our guest house 
+                            offers a perfect blend of traditional architecture and modern comfort.
+                        </p>
+                        <p class="text-lg text-gray-700 mb-8">
+                            Our mission is to create memorable experiences for every guest while showcasing the rich 
+                            culture and natural beauty of South Africa. From our warm staff to our carefully designed 
+                            rooms, every detail reflects our commitment to excellence.
+                        </p>
+                        
+                        <!-- Amenities Grid -->
+                        <div class="grid grid-cols-2 gap-4 stagger-children">
+                            <div class="flex items-center space-x-3 hover-scale">
+                                <i class="fas fa-wifi text-orange-600 text-xl"></i>
+                                <span class="text-gray-700">Free WiFi</span>
+                            </div>
+                            <div class="flex items-center space-x-3 hover-scale">
+                                <i class="fas fa-car text-orange-600 text-xl"></i>
+                                <span class="text-gray-700">Free Parking</span>
+                            </div>
+                            <div class="flex items-center space-x-3 hover-scale">
+                                <i class="fas fa-swimming-pool text-orange-600 text-xl"></i>
+                                <span class="text-gray-700">Swimming Pool</span>
+                            </div>
+                            <div class="flex items-center space-x-3 hover-scale">
+                                <i class="fas fa-couch text-orange-600 text-xl"></i>
+                                <span class="text-gray-700">Lounge Area</span>
+                            </div>
+                            <div class="flex items-center space-x-3 hover-scale">
+                                <i class="fas fa-leaf text-orange-600 text-xl"></i>
+                                <span class="text-gray-700">Nature Walks</span>
+                            </div>
+                            <div class="flex items-center space-x-3 hover-scale">
+                                <i class="fas fa-home text-orange-600 text-xl"></i>
+                                <span class="text-gray-700">Daily Housekeeping</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative fade-in-right">
+                        <img 
+                            src="/images/hero-bg3.jpg"
+                            alt="Phokela Guest House Building" 
+                            class="rounded-2xl shadow-xl w-full h-auto hover-scale"
+                        />
+                        <div class="absolute -bottom-6 -right-6 bg-orange-600 text-white p-6 rounded-xl shadow-lg scale-in">
+                            <h3 class="text-2xl font-bold mb-2">12+ Years</h3>
+                            <p class="text-sm opacity-90">of Excellence</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
+        <!-- Features Section -->
+        <section class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 stagger-children">
+                    <div class="bg-transparent text-center p-8 hover-lift">
+                        <i class="fas fa-map-marker-alt text-black text-3xl mb-4 hover-scale"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Prime Location</h3>
+                        <p class="text-gray-600">
+                            Located in the heart of Limpopo province, close to major attractions and nature reserves
+                        </p>
+                    </div>
+
+                    <div class="bg-transparent text-center p-8 hover-lift">
+                        <i class="fas fa-award text-black text-3xl mb-4 hover-scale"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Award Winning</h3>
+                        <p class="text-gray-600">
+                            Recognized for outstanding hospitality and commitment to sustainable tourism
+                        </p>
+                    </div>
+
+                    <div class="bg-transparent text-center p-8 hover-lift">
+                        <i class="fas fa-leaf text-black text-3xl mb-4 hover-scale"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Eco Friendly</h3>
+                        <p class="text-gray-600">
+                            Committed to environmental conservation and sustainable practices
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 fade-in">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Story</h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        A journey of passion, dedication, and South African hospitality
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6 fade-in-left">
+                        <div class="card-entrance">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">The Beginning</h3>
+                            <p class="text-gray-700">
+                                Founded by the Phokela family in 2010, our guest house started as a dream to share 
+                                the beauty of South African culture and hospitality with visitors from around the world.
+                            </p>
+                        </div>
+                        
+                        <div class="card-entrance">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">Growth & Recognition</h3>
+                            <p class="text-gray-700">
+                                Over the years, we've expanded our facilities while maintaining our commitment to 
+                                personalized service and authentic experiences. Our efforts have been recognized 
+                                with numerous hospitality awards.
+                            </p>
+                        </div>
+
+                        <div class="card-entrance">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">Looking Forward</h3>
+                            <p class="text-gray-700">
+                                Today, we continue to evolve while staying true to our roots, offering modern 
+                                comfort in a setting that celebrates South African heritage and natural beauty.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 fade-in-right stagger-children">
+                        <img 
+                            src="/images/lounge.jpg" 
+                            alt="Restaurant"
+                            class="rounded-lg shadow-md w-full h-48 object-cover hover-scale"
+                        />
+                        <img 
+                            src="/images/pool.jpg" 
+                            alt="Pool Area"
+                            class="rounded-lg shadow-md w-full h-48 object-cover hover-scale"
+                        />
+                        <img 
+                            src="/images/recreation.jpg" 
+                            alt="Recreation Area"
+                            class="rounded-lg shadow-md w-full h-48 object-cover hover-scale"
+                        />
+                        <img 
+                            src="/images/Garden.jpg" 
+                            alt="Gardens"
+                            class="rounded-lg shadow-md w-full h-48 object-cover hover-scale"
+                        />
+                    </div>
+                </div>
+            </div>
+        </section>
     
     <!-- Location -->
-    <section class="py-20 bg-gray-50">
+    <section class="py-20 bg-orange-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
@@ -203,19 +545,19 @@
                     </p>
                     <div class="space-y-4">
                         <div class="flex items-center">
-                            <i class="fas fa-mountain text-blue-600 mr-3"></i>
-                            <span class="text-gray-700">5 minutes from Drakensberg National Park</span>
+                            <i class="fas fa-home text-orange-600 mr-3"></i>
+                            <span class="text-gray-700">Daily Housekeeping</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="fas fa-plane text-blue-600 mr-3"></i>
-                            <span class="text-gray-700">2 hours from King Shaka International Airport</span>
+                            <i class="fas fa-water text-orange-600 mr-3"></i>
+                            <span class="text-gray-700">Swimming Pool</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="fas fa-car text-blue-600 mr-3"></i>
+                            <i class="fas fa-car text-orange-600 mr-3"></i>
                             <span class="text-gray-700">Free parking available on-site</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="fas fa-wifi text-blue-600 mr-3"></i>
+                            <i class="fas fa-wifi text-orange-600 mr-3"></i>
                             <span class="text-gray-700">Complimentary high-speed WiFi throughout</span>
                         </div>
                     </div>
@@ -238,6 +580,7 @@
             </div>
         </div>
     </section>
+    </section>
     <!-- Our Values -->
     <section class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -246,23 +589,23 @@
                 <p class="text-xl text-gray-600">The principles that guide everything we do</p>
             </div>
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-heart text-2xl text-blue-600"></i>
+                <div class="bg-transparent p-8">
+                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-heart text-2xl text-orange-600"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-4 text-center">Hospitality</h3>
                     <p class="text-gray-600 text-center">We treat every guest like family, ensuring their comfort and satisfaction is our top priority.</p>
                 </div>
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-leaf text-2xl text-blue-600"></i>
+                <div class="bg-transparent p-8 ">
+                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-leaf text-2xl text-orange-600"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-4 text-center">Sustainability</h3>
                     <p class="text-gray-600 text-center">We're committed to protecting our beautiful environment through eco-friendly practices and local partnerships.</p>
                 </div>
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-star text-2xl text-blue-600"></i>
+                <div class="bg-transparent p-8">
+                    <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-star text-2xl text-orange-600"></i>
                     </div>
                     <h3 class="text-xl font-semibold mb-4 text-center">Excellence</h3>
                     <p class="text-gray-600 text-center">We continuously strive to exceed expectations and provide exceptional experiences for all our guests.</p>
@@ -271,45 +614,237 @@
         </div>
     </section>
 
-    <!-- Call to Action -->
-    <section class="py-20 bg-blue-600 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-bold mb-4">Ready to Experience Phokela?</h2>
-            <p class="text-xl mb-8">Book your stay today and discover why our guests keep coming back</p>
-            <a href="/booking.html" class="bg-white text-blue-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg text-lg transition duration-300">
-                Book Your Stay
-            </a>
-        </div>
-    </section>
 
-    <!-- Contact Info -->
-    <section class="py-20 bg-slate-900 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Get In Touch</h2>
-                <p class="text-xl text-gray-300 max-w-2xl mx-auto">We'd love to hear from you and help plan your perfect stay at Phokela Guest House</p>
+    <!-- Contact Section -->
+    <section id="contact" class="pt-16 min-h-screen bg-amber-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <!-- Header -->
+            <div class="text-center mb-16 fade-in">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Contact Us</h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Get in touch with us for bookings, inquiries, or just to say hello
+                </p>
             </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center group">
-                    <div class="bg-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-600 transition-colors duration-300">
-                        <i class="fas fa-map-marker-alt text-2xl text-white"></i>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Contact Form -->
+                <div class="bg-white shadow-lg rounded-lg fade-in-left">
+                    <div class="p-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
+                        <form id="contact-form" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-900 mb-2">
+                                        First Name *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="firstName"
+                                        name="firstName"
+                                        required
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                                        placeholder="Enter your first name"
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-900 mb-2">
+                                        Last Name *
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="lastName"
+                                        name="lastName"
+                                        required
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                                        placeholder="Enter your last name"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                    Email Address *
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                                    placeholder="Enter your email address"
+                                />
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                    Phone Number
+                                </label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                                    placeholder="Enter your phone number"
+                                />
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                    Subject *
+                                </label>
+                                <select
+                                    id="subject"
+                                    name="subject"
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                                >
+                                    <option value="">Select a subject</option>
+                                    <option value="booking">Booking Inquiry</option>
+                                    <option value="general">General Question</option>
+                                    <option value="feedback">Feedback</option>
+                                    <option value="complaint">Complaint</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                    Message *
+                                </label>
+                                <textarea
+                                    id="message"
+                                    name="message"
+                                    required
+                                    rows="5"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors resize-vertical"
+                                    placeholder="Enter your message here..."
+                                ></textarea>
+                            </div>
+                            
+                            <button
+                                type="submit"
+                                id="submit-btn"
+                                class="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <span id="submit-text">Send Message</span>
+                                <span id="submit-loading" class="hidden">
+                                    <i class="fas fa-spinner fa-spin mr-2"></i>Sending...
+                                </span>
+                            </button>
+                        </form>
                     </div>
-                    <h3 class="text-xl font-semibold mb-4">Location</h3>
-                    <p class="text-gray-300 leading-relaxed">123 Mountain View Road<br>Phokela, South Africa</p>
                 </div>
-                <div class="text-center group">
-                    <div class="bg-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-600 transition-colors duration-300">
-                        <i class="fas fa-phone text-2xl text-white"></i>
+
+                <!-- Contact Information -->
+                <div class="space-y-8 fade-in-right">
+                    <div class="bg-white shadow-lg rounded-lg hover-lift">
+                        <div class="p-8">
+                            <h2 class="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h2>
+                            <div class="space-y-6">
+                                <div class="flex items-start space-x-4">
+                                    <i class="fas fa-map-marker-alt text-orange-600 text-xl mt-1 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">Address</h4>
+                                        <p class="text-gray-600">
+                                            123 Mokopane Road<br />
+                                            Polokwane, Limpopo 0700<br />
+                                            South Africa
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4">
+                                    <i class="fas fa-phone text-orange-600 text-xl flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">Phone</h4>
+                                        <p class="text-gray-600">+27 15 123 4567</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4">
+                                    <i class="fas fa-envelope text-orange-600 text-xl flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">Email</h4>
+                                        <p class="text-gray-600">info@phokelaguest.co.za</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-4">
+                                    <i class="fab fa-whatsapp text-green-500 text-xl flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">WhatsApp</h4>
+                                        <a 
+                                            href="https://wa.me/27151234567" 
+                                            class="text-green-500 hover:text-orange-600 transition-colors"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            +27 15 123 4567
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="pt-6 border-t border-gray-200">
+                                    <h4 class="font-semibold text-gray-900 mb-3">Follow Us</h4>
+                                    <div class="flex space-x-4">
+                                        <a href="#" class="text-gray-400 hover:text-orange-600 transition-colors">
+                                            <i class="fab fa-facebook text-2xl"></i>
+                                        </a>
+                                        <a href="#" class="text-gray-400 hover:text-orange-600 transition-colors">
+                                            <i class="fab fa-instagram text-2xl"></i>
+                                        </a>
+                                        <a href="#" class="text-gray-400 hover:text-orange-600 transition-colors">
+                                            <i class="fab fa-twitter text-2xl"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-semibold mb-4">Phone</h3>
-                    <p class="text-gray-300 leading-relaxed">+27 12 345 6789<br>+27 87 654 3210</p>
-                </div>
-                <div class="text-center group">
-                    <div class="bg-orange-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-600 transition-colors duration-300">
-                        <i class="fas fa-envelope text-2xl text-white"></i>
+
+                    <!-- Map -->
+                    <div class="bg-white shadow-lg rounded-lg hover-lift">
+                        <div class="p-4">
+                            <div class="w-full h-64 bg-gray-200 rounded-lg overflow-hidden">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2391.425949389787!2d28.999310237793818!3d-24.18284265949144!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ec0b5096558c717%3A0xb519fe43b4d04397!2sPhokela%20Guest%20House!5e0!3m2!1sen!2sza!4v1757076341597!5m2!1sen!2sza"
+                                    width="100%"
+                                    height="100%"
+                                    style="border:0;"
+                                    allowfullscreen=""
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-semibold mb-4">Email</h3>
-                    <p class="text-gray-300 leading-relaxed">info@phokelaguesthouse.co.za<br>bookings@phokelaguesthouse.co.za</p>
+
+                    <!-- Business Hours -->
+                    <div class="bg-white shadow-lg rounded-lg hover-lift">
+                        <div class="p-8">
+                            <h3 class="text-xl font-bold text-gray-900 mb-6">Business Hours</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Monday - Friday</span>
+                                    <span class="font-medium">8:00 AM - 6:00 PM</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Saturday</span>
+                                    <span class="font-medium">9:00 AM - 5:00 PM</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Sunday</span>
+                                    <span class="font-medium">10:00 AM - 4:00 PM</span>
+                                </div>
+                                <div class="pt-2 border-t border-gray-200">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">24/7 Emergency</span>
+                                        <span class="font-medium text-orange-600">Available</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

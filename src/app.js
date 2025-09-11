@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import './utils/db.js';
 import apiRoutes from './routes/index.js';
+import roomUnitRoutes from './routes/roomUnits.js';
 
 dotenv.config();
 const app = express();
@@ -37,6 +38,7 @@ app.use(session({
 
 // API routes
 app.use('/api', apiRoutes);
+app.use('/api', roomUnitRoutes);
 
 // Serve HTML pages
 app.get('/', (req, res) => {

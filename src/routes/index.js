@@ -4,14 +4,78 @@ import bcrypt from 'bcryptjs';
 import { nanoid } from 'nanoid';
 import User from '../models/User.js';
 import Room from '../models/Room.js';
+import RoomType from '../models/RoomType.js';
+import RoomUnit from '../models/RoomUnit.js';
 import Booking from '../models/Booking.js';
 import ContactMessage from '../models/ContactMessage.js';
 import Admin from '../models/Admin.js';
 import { isAuthenticated, requireAdmin } from '../middleware/auth.js';
-import { createFastPayCheckout, verifyFastPayCheckout } from '../services/fastpay.js';
+import { 
+  initializePaystackTransaction, 
+  verifyPaystackTransaction, 
+  generatePaystackReference,
+  getPaystackPublicKey,
+  isPaystackConfigured 
+} from '../services/paystack.js';
 import { sendBookingConfirmation, sendBookingCancellation } from '../services/email.js';
 
 const router = Router();
+
+// Helper functions for room unit selection and pricing
+function selectRoomUnit(availableUnits, guestPreferences = {}) {
+  if (!availableUnits || availableUnits.length === 0) return null;
+  
+  // If no preferences, return first available unit
+  if (!guestPreferences) return availableUnits[0];
+  
+  // Filter by floor preference
+  if (guestPreferences.floor) {
+    const floorUnits = availableUnits.filter(unit => 
+      unit.floor && unit.floor.toString() === guestPreferences.floor
+    );
+    if (floorUnits.length > 0) return floorUnits[0];
+  }
+  
+  // Filter by view preference
+  if (guestPreferences.view) {
+    const viewUnits = availableUnits.filter(unit => 
+      unit.specialFeatures && unit.specialFeatures.includes(guestPreferences.view)
+    );
+    if (viewUnits.length > 0) return viewUnits[0];
+  }
+  
+  // Filter by accessibility preference
+  if (guestPreferences.accessibility) {
+    const accessibleUnits = availableUnits.filter(unit => 
+      unit.specialFeatures && unit.specialFeatures.includes('accessible')
+    );
+    if (accessibleUnits.length > 0) return accessibleUnits[0];
+  }
+  
+  // Return first available unit
+  return availableUnits[0];
+}
+
+function getSeasonalPricingMultiplier(roomType, checkinDate) {
+  if (!roomType.seasonalPricing || roomType.seasonalPricing.length === 0) {
+    return 1.0;
+  }
+  
+  const activePricing = roomType.seasonalPricing.find(pricing => 
+    pricing.isActive && 
+    checkinDate >= new Date(pricing.startDate) && 
+    checkinDate <= new Date(pricing.endDate)
+  );
+  
+  return activePricing ? activePricing.priceMultiplier : 1.0;
+}
+
+function generateBookingReference() {
+  const prefix = 'PHK';
+  const year = new Date().getFullYear().toString().slice(-2);
+  const random = Math.random().toString(36).substr(2, 6).toUpperCase();
+  return `${prefix}-${year}-${random}`;
+}
 
 const insertRoomSchema = z.object({
   name: z.string().min(1),
@@ -26,14 +90,21 @@ const insertRoomSchema = z.object({
 
 const insertBookingSchema = z.object({
   userId: z.string().optional(),
-  roomId: z.string().min(1),
+  roomTypeId: z.string().min(1), // Changed from roomId to roomTypeId
+  roomUnitId: z.string().optional(), // Optional - will be assigned automatically
   guestName: z.string().min(1),
   guestEmail: z.string().email(),
   guestPhone: z.string().min(3),
   checkinDate: z.string(),
   checkoutDate: z.string(),
   numberOfGuests: z.number().int().positive(),
-  specialRequests: z.string().optional()
+  specialRequests: z.string().optional(),
+  guestPreferences: z.object({
+    smoking: z.boolean().default(false),
+    accessibility: z.boolean().default(false),
+    floor: z.string().optional(),
+    view: z.string().optional()
+  }).optional()
 });
 
 const insertContactMessageSchema = z.object({
@@ -96,33 +167,93 @@ router.post('/admin/create', async (req, res) => {
   } catch (e) { console.error(e); res.status(500).json({ message: 'Failed to create admin' }); }
 });
 
+// Legacy room routes for backward compatibility
 router.get('/rooms', async (_req, res) => {
-  try { const rooms = await Room.find().sort({ price: 1 }); res.json(rooms); }
+  try { 
+    // Redirect to room types for backward compatibility
+    const roomTypes = await RoomType.find({ isActive: true });
+    res.json(roomTypes); 
+  }
   catch (e) { console.error(e); res.status(500).json({ message: 'Failed to fetch rooms' }); }
 });
 
 router.get('/rooms/:id', async (req, res) => {
-  try { const room = await Room.findById(req.params.id); if (!room) return res.status(404).json({ message: 'Room not found' }); res.json(room); }
+  try { 
+    const roomType = await RoomType.findById(req.params.id);
+    if (!roomType) return res.status(404).json({ message: 'Room not found' });
+    res.json(roomType); 
+  }
   catch (e) { console.error(e); res.status(500).json({ message: 'Failed to fetch room' }); }
 });
 
+// Admin room management routes (legacy - redirect to room types)
 router.post('/admin/rooms', requireAdmin, async (req, res) => {
-  try { const data = insertRoomSchema.parse(req.body); const room = await Room.create(data); res.status(201).json(room); }
+  try { 
+    // Redirect to room type creation
+    const data = insertRoomSchema.parse(req.body);
+    const roomType = new RoomType({
+      name: data.name,
+      type: data.type,
+      description: data.description,
+      price: data.price,
+      maxGuests: data.maxGuests,
+      amenities: data.amenities || [],
+      images: data.imageUrl ? [data.imageUrl] : [],
+      isActive: data.isAvailable !== false,
+      totalUnits: 1,
+      availableUnits: data.isAvailable !== false ? 1 : 0
+    });
+    await roomType.save();
+    
+    // Create a room unit for this room type
+    const roomUnit = new RoomUnit({
+      roomTypeId: roomType._id,
+      unitNumber: '001',
+      unitName: `${roomType.name} #001`,
+      isAvailable: data.isAvailable !== false,
+      status: 'available'
+    });
+    await roomUnit.save();
+    
+    res.status(201).json(roomType); 
+  }
   catch (e) { console.error(e); res.status(500).json({ message: 'Failed to create room' }); }
 });
 
 router.put('/admin/rooms/:id', requireAdmin, async (req, res) => {
-  try { const data = insertRoomSchema.partial().parse(req.body); const room = await Room.findByIdAndUpdate(req.params.id, data, { new: true }); res.json(room); }
+  try { 
+    const data = insertRoomSchema.partial().parse(req.body); 
+    const roomType = await RoomType.findByIdAndUpdate(req.params.id, {
+      name: data.name,
+      type: data.type,
+      description: data.description,
+      price: data.price,
+      maxGuests: data.maxGuests,
+      amenities: data.amenities,
+      images: data.imageUrl ? [data.imageUrl] : [],
+      isActive: data.isAvailable !== false
+    }, { new: true }); 
+    res.json(roomType); 
+  }
   catch (e) { console.error(e); res.status(500).json({ message: 'Failed to update room' }); }
 });
 
 router.delete('/admin/rooms/:id', requireAdmin, async (req, res) => {
-  try { await Room.findByIdAndDelete(req.params.id); res.json({ message: 'Room deleted successfully' }); }
+  try { 
+    // Delete room type and all associated units
+    await RoomUnit.deleteMany({ roomTypeId: req.params.id });
+    await RoomType.findByIdAndDelete(req.params.id); 
+    res.json({ message: 'Room deleted successfully' }); 
+  }
   catch (e) { console.error(e); res.status(500).json({ message: 'Failed to delete room' }); }
 });
 
 router.patch('/admin/rooms/:id/availability', requireAdmin, async (req, res) => {
-  try { const { isAvailable } = req.body; const room = await Room.findByIdAndUpdate(req.params.id, { isAvailable }, { new: true }); res.json(room); }
+  try { 
+    const { isAvailable } = req.body; 
+    const roomType = await RoomType.findByIdAndUpdate(req.params.id, { isActive: isAvailable }, { new: true }); 
+    res.json(roomType); 
+  }
   catch (e) { console.error(e); res.status(500).json({ message: 'Failed to update room availability' }); }
 });
 
@@ -130,8 +261,26 @@ router.post('/rooms/:id/check-availability', async (req, res) => {
   try {
     const { checkinDate, checkoutDate } = req.body;
     if (!checkinDate || !checkoutDate) return res.status(400).json({ message: 'Check-in and check-out dates are required' });
-    const cid = new Date(checkinDate), cod = new Date(checkoutDate);
-    const conflict = await Booking.exists({ roomId: req.params.id, status: { $ne: 'cancelled' }, $or: [{ checkinDate: { $lte: cod }, checkoutDate: { $gte: cid } }] });
+    
+    // Use room type availability checking
+    const roomType = await RoomType.findById(req.params.id);
+    if (!roomType) return res.status(404).json({ message: 'Room type not found' });
+    
+    const checkin = new Date(checkinDate);
+    const checkout = new Date(checkoutDate);
+    
+    // Check if room type is active
+    if (!roomType.isActive) {
+      return res.json({ available: false, reason: 'Room type is not available' });
+    }
+    
+    // Check for booking conflicts
+    const conflict = await Booking.exists({ 
+      roomTypeId: req.params.id, 
+      status: { $ne: 'cancelled' }, 
+      $or: [{ checkinDate: { $lte: checkout }, checkoutDate: { $gte: checkin } }] 
+    });
+    
     res.json({ available: !conflict });
   } catch (e) { console.error(e); res.status(500).json({ message: 'Failed to check availability' }); }
 });
@@ -142,8 +291,16 @@ router.get('/bookings', isAuthenticated, async (req, res) => {
     const me = await User.findOne({ id: sub });
     const isAdmin = !!me?.isAdmin;
     const query = isAdmin ? {} : { userId: sub };
-    const bookings = await Booking.find(query).sort({ createdAt: -1 }).populate('roomId');
-    const results = bookings.map(b => ({ ...b.toObject(), room: b.roomId, roomId: b.roomId?._id?.toString() }));
+    const bookings = await Booking.find(query).sort({ createdAt: -1 })
+      .populate('roomUnitId', 'unitNumber unitName floor status')
+      .populate('roomTypeId', 'name type price maxGuests amenities');
+    const results = bookings.map(b => ({ 
+      ...b.toObject(), 
+      room: b.roomTypeId, 
+      roomUnit: b.roomUnitId,
+      roomId: b.roomTypeId?._id?.toString(), // For backward compatibility
+      roomUnitId: b.roomUnitId?._id?.toString()
+    }));
     res.json(results);
   } catch (e) { console.error(e); res.status(500).json({ message: 'Failed to fetch bookings' }); }
 });
@@ -165,20 +322,34 @@ router.post('/bookings', async (req, res) => {
 });
 
 router.get('/admin/bookings', requireAdmin, async (_req, res) => {
-  try { const bookings = await Booking.find().sort({ createdAt: -1 }).populate('roomId'); const results = bookings.map(b => ({ ...b.toObject(), room: b.roomId, roomId: b.roomId?._id?.toString() })); res.json(results); }
+  try { 
+    const bookings = await Booking.find().sort({ createdAt: -1 })
+      .populate('roomUnitId', 'unitNumber unitName floor status')
+      .populate('roomTypeId', 'name type price maxGuests amenities');
+    const results = bookings.map(b => ({ 
+      ...b.toObject(), 
+      room: b.roomTypeId, 
+      roomUnit: b.roomUnitId,
+      roomId: b.roomTypeId?._id?.toString(), // For backward compatibility
+      roomUnitId: b.roomUnitId?._id?.toString()
+    })); 
+    res.json(results); 
+  }
   catch (e) { console.error(e); res.status(500).json({ message: 'Failed to fetch bookings' }); }
 });
 
 router.patch('/admin/bookings/:id', requireAdmin, async (req, res) => {
   try { 
-    const updated = await Booking.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('roomId'); 
+    const updated = await Booking.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      .populate('roomUnitId', 'unitNumber unitName floor status')
+      .populate('roomTypeId', 'name type price maxGuests amenities'); 
     
     // Send email notifications based on status change
     if (req.body.status === 'cancelled') {
-      const bookingWithRoom = { ...updated.toObject(), room: updated.roomId };
+      const bookingWithRoom = { ...updated.toObject(), room: updated.roomTypeId, roomUnit: updated.roomUnitId };
       await sendBookingCancellation(bookingWithRoom);
     } else if (req.body.status === 'confirmed' && updated.paymentStatus === 'paid') {
-      const bookingWithRoom = { ...updated.toObject(), room: updated.roomId };
+      const bookingWithRoom = { ...updated.toObject(), room: updated.roomTypeId, roomUnit: updated.roomUnitId };
       await sendBookingConfirmation(bookingWithRoom);
     }
     
@@ -194,10 +365,11 @@ router.get('/admin/stats', requireAdmin, async (_req, res) => {
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const monthly = await Booking.find({ createdAt: { $gte: startOfMonth }, status: { $ne: 'cancelled' } });
     const monthlyRevenue = monthly.reduce((sum, b) => sum + parseFloat(b.totalAmount), 0);
-    const totalRooms = await Room.countDocuments();
+    const totalRoomTypes = await RoomType.countDocuments();
+    const totalRoomUnits = await RoomUnit.countDocuments();
     const activeBookings = await Booking.countDocuments({ checkinDate: { $lte: now }, checkoutDate: { $gte: now }, status: { $ne: 'cancelled' } });
-    const occupancyRate = totalRooms > 0 ? (activeBookings / totalRooms) * 100 : 0;
-    res.json({ totalBookings, monthlyRevenue, occupancyRate });
+    const occupancyRate = totalRoomUnits > 0 ? (activeBookings / totalRoomUnits) * 100 : 0;
+    res.json({ totalBookings, monthlyRevenue, occupancyRate, totalRoomTypes, totalRoomUnits });
   } catch (e) { console.error(e); res.status(500).json({ message: 'Failed to fetch stats' }); }
 });
 
@@ -231,37 +403,142 @@ router.post('/admin/init-rooms', requireAdmin, async (_req, res) => {
   } catch (e) { console.error(e); res.status(500).json({ message: 'Failed to create default rooms' }); }
 });
 
+router.get('/payments/config', async (req, res) => {
+  try {
+    res.json({ 
+      publicKey: getPaystackPublicKey(),
+      configured: isPaystackConfigured()
+    });
+  } catch (e) { 
+    console.error('Payment config error', e); 
+    res.status(500).json({ message: 'Failed to get payment config', error: e.message }); 
+  }
+});
+
 router.post('/payments/create-checkout', async (req, res) => {
   try {
-    const { amount, currency = 'IQD', metadata = {} } = req.body;
-    if (!process.env.FASTPAY_STORE_ID || !process.env.FASTPAY_STORE_PASSWORD) return res.status(500).json({ message: 'Payment service not configured' });
-    const orderId = metadata.orderId || `ord_${nanoid(12)}`;
-    const session = await createFastPayCheckout({ amount: parseFloat(amount), currency, orderId, metadata });
-    res.json({ checkoutId: session.checkoutId, redirectUrl: session.redirectUrl, status: 'created' });
-  } catch (e) { console.error('FastPay create error', e.response?.data || e.message); res.status(500).json({ message: 'Failed to create payment checkout', error: e.message }); }
+    const { amount, currency = 'ZAR', metadata = {} } = req.body;
+    if (!isPaystackConfigured()) return res.status(500).json({ message: 'Payment service not configured' });
+    
+    const reference = generatePaystackReference();
+    const result = await initializePaystackTransaction({
+      amount: parseFloat(amount),
+      email: metadata.email || 'test@example.com',
+      reference,
+      metadata,
+      currency
+    });
+    
+    if (result.success) {
+      res.json({ 
+        reference: result.data.reference,
+        authorizationUrl: result.data.authorization_url,
+        accessCode: result.data.access_code,
+        status: 'created' 
+      });
+    } else {
+      res.status(500).json({ message: 'Failed to create payment checkout', error: result.error });
+    }
+  } catch (e) { 
+    console.error('Paystack create error', e); 
+    res.status(500).json({ message: 'Failed to create payment checkout', error: e.message }); 
+  }
 });
 
 router.post('/payments/verify', async (req, res) => {
-  try { const { checkoutId } = req.body; if (!checkoutId) return res.status(400).json({ message: 'checkoutId required' }); const data = await verifyFastPayCheckout(checkoutId); res.json({ status: data.status || data.payment_status || 'unknown', raw: data }); }
-  catch (e) { console.error('FastPay verify error', e.response?.data || e.message); res.status(500).json({ message: 'Failed to verify payment', error: e.message }); }
+  try { 
+    const { reference } = req.body; 
+    if (!reference) return res.status(400).json({ message: 'reference required' }); 
+    
+    const verification = await verifyPaystackTransaction(reference);
+    
+    if (verification.success) {
+      const isPaid = verification.data.status === 'success';
+      
+      // If payment is successful, find and update the booking
+      if (isPaid) {
+        const booking = await Booking.findOne({ bookingReference: reference });
+        if (booking && booking.paymentStatus !== 'paid') {
+          await Booking.findByIdAndUpdate(booking._id, { 
+            paymentStatus: 'paid', 
+            status: 'confirmed',
+            paymentId: verification.data.id,
+            paymentMethod: 'paystack',
+            paidAt: new Date()
+          });
+          
+          // Send confirmation email
+          const updatedBooking = await Booking.findById(booking._id)
+            .populate('roomUnitId', 'unitNumber unitName floor status')
+            .populate('roomTypeId', 'name type price maxGuests amenities');
+            
+          if (updatedBooking) {
+            const bookingWithRoom = { ...updatedBooking.toObject(), room: updatedBooking.roomTypeId, roomUnit: updatedBooking.roomUnitId };
+            await sendBookingConfirmation(bookingWithRoom);
+            console.log(`Booking ${booking._id} confirmed via verification and email sent`);
+          }
+        }
+      }
+      
+      res.json({ 
+        status: verification.data.status, 
+        paid: isPaid,
+        amount: verification.data.amount / 100, // Convert from cents
+        currency: verification.data.currency,
+        reference: verification.data.reference,
+        raw: verification.data 
+      });
+    } else {
+      res.status(400).json({ 
+        message: 'Failed to verify payment', 
+        error: verification.error 
+      });
+    }
+  }
+  catch (e) { 
+    console.error('Paystack verify error', e); 
+    res.status(500).json({ message: 'Failed to verify payment', error: e.message }); 
+  }
 });
 
 router.post('/payments/webhook', async (req, res) => {
   try {
-    const evt = req.body || {};
-    const bookingId = evt?.metadata?.bookingId || evt?.order_id || evt?.orderId;
-    const s = (evt.status || evt.payment_status || '').toLowerCase();
-    const paid = ['paid','success','succeeded','completed'];
-    if (bookingId && paid.includes(s)) {
-      const booking = await Booking.findByIdAndUpdate(bookingId, { paymentStatus: 'paid', status: 'confirmed' }).populate('roomId');
-      if (booking) {
-        // Send confirmation email
-        const bookingWithRoom = { ...booking.toObject(), room: booking.roomId };
-        await sendBookingConfirmation(bookingWithRoom);
+    const event = req.body;
+    
+    // Handle Paystack webhook events
+    if (event.event === 'charge.success') {
+      const { reference, metadata } = event.data;
+      
+      if (reference && metadata?.bookingId) {
+        // Verify the transaction with Paystack
+        const verification = await verifyPaystackTransaction(reference);
+        
+        if (verification.success && verification.data.status === 'success') {
+          const booking = await Booking.findByIdAndUpdate(metadata.bookingId, { 
+            paymentStatus: 'paid', 
+            status: 'confirmed',
+            paymentId: verification.data.id,
+            paymentMethod: 'paystack',
+            paidAt: new Date()
+          })
+            .populate('roomUnitId', 'unitNumber unitName floor status')
+            .populate('roomTypeId', 'name type price maxGuests amenities');
+            
+          if (booking) {
+            // Send confirmation email
+            const bookingWithRoom = { ...booking.toObject(), room: booking.roomTypeId, roomUnit: booking.roomUnitId };
+            await sendBookingConfirmation(bookingWithRoom);
+            console.log(`Booking ${metadata.bookingId} confirmed and email sent`);
+          }
+        }
       }
     }
+    
     res.json({ received: true });
-  } catch (e) { console.error('Webhook error', e); res.status(500).json({ message: 'Webhook processing failed' }); }
+  } catch (e) { 
+    console.error('Webhook error', e); 
+    res.status(500).json({ message: 'Webhook processing failed' }); 
+  }
 });
 
 router.post('/bookings/with-payment', async (req, res) => {
@@ -269,20 +546,155 @@ router.post('/bookings/with-payment', async (req, res) => {
     const data = insertBookingSchema.parse(req.body);
     const checkinDate = new Date(data.checkinDate);
     const checkoutDate = new Date(data.checkoutDate);
-    const room = await Room.findById(data.roomId);
-    if (!room) return res.status(404).json({ message: 'Room not found' });
-    const overlap = await Booking.exists({ roomId: data.roomId, status: { $ne: 'cancelled' }, $or: [{ checkinDate: { $lte: checkoutDate }, checkoutDate: { $gte: checkinDate } }] });
-    if (overlap) return res.status(400).json({ message: 'Room is not available for the selected dates' });
+    
+    // Get room type
+    const roomType = await RoomType.findById(data.roomTypeId);
+    if (!roomType) return res.status(404).json({ message: 'Room type not found' });
+    
+    // Check if room type can accommodate the number of guests
+    if (data.numberOfGuests > roomType.maxGuests) {
+      return res.status(400).json({ message: `This room type can only accommodate ${roomType.maxGuests} guests` });
+    }
+    
+    // Check minimum stay requirement
     const nights = Math.ceil((checkoutDate - checkinDate) / (1000*60*60*24));
-    const totalAmount = (parseFloat(room.price) * nights).toFixed(2);
-    const booking = await Booking.create({ ...data, checkinDate, checkoutDate, totalAmount, paymentStatus: 'pending', status: 'pending' });
+    if (nights < roomType.minStay) {
+      return res.status(400).json({ message: `Minimum stay is ${roomType.minStay} nights` });
+    }
     
-    // Populate room data for email
-    const bookingWithRoom = { ...booking.toObject(), room };
+    // Check maximum stay requirement
+    if (nights > roomType.maxStay) {
+      return res.status(400).json({ message: `Maximum stay is ${roomType.maxStay} nights` });
+    }
     
-    const { redirectUrl, checkoutId } = await createFastPayCheckout({ amount: parseFloat(totalAmount), currency: 'IQD', orderId: booking._id.toString(), metadata: { bookingId: booking._id.toString(), roomName: room.name, guestName: data.guestName } });
-    res.status(201).json({ booking, payment: { checkoutId, redirectUrl } });
-  } catch (e) { console.error(e); res.status(500).json({ message: 'Failed to create booking with payment' }); }
+    // Check blackout dates
+    const isBlackedOut = roomType.blackoutDates.some(blackout => {
+      const blackoutStart = new Date(blackout.startDate);
+      const blackoutEnd = new Date(blackout.endDate);
+      return (checkinDate <= blackoutEnd && checkoutDate >= blackoutStart);
+    });
+    
+    if (isBlackedOut) {
+      return res.status(400).json({ message: 'Room type is not available for the selected dates due to blackout period' });
+    }
+    
+    // Find available room unit
+    let roomUnit;
+    if (data.roomUnitId) {
+      // Specific room unit requested
+      roomUnit = await RoomUnit.findById(data.roomUnitId);
+      if (!roomUnit || roomUnit.roomTypeId.toString() !== data.roomTypeId) {
+        return res.status(404).json({ message: 'Requested room unit not found or not available for this room type' });
+      }
+      
+      // Check if the specific unit is available
+      const overlap = await Booking.exists({ 
+        roomUnitId: data.roomUnitId, 
+        status: { $ne: 'cancelled' }, 
+        $or: [{ checkinDate: { $lte: checkoutDate }, checkoutDate: { $gte: checkinDate } }] 
+      });
+      
+      if (overlap) {
+        return res.status(400).json({ message: 'Requested room unit is not available for the selected dates' });
+      }
+    } else {
+      // Auto-assign available room unit
+      const availableUnits = await RoomUnit.find({
+        roomTypeId: data.roomTypeId,
+        isAvailable: true,
+        status: 'available',
+        $or: [
+          { maintenanceStartDate: { $exists: false } },
+          { maintenanceStartDate: { $gt: checkoutDate } },
+          { maintenanceEndDate: { $lt: checkinDate } }
+        ]
+      });
+      
+      // Check for booking conflicts
+      const conflictingBookings = await Booking.find({
+        roomTypeId: data.roomTypeId,
+        status: { $ne: 'cancelled' },
+        $or: [
+          { checkinDate: { $lte: checkoutDate }, checkoutDate: { $gte: checkinDate } }
+        ]
+      });
+      
+      const occupiedUnitIds = new Set(conflictingBookings.map(booking => booking.roomUnitId.toString()));
+      const availableUnitsList = availableUnits.filter(unit => 
+        !occupiedUnitIds.has(unit._id.toString())
+      );
+      
+      if (availableUnitsList.length === 0) {
+        return res.status(400).json({ message: 'No room units available for the selected dates' });
+      }
+      
+      // Select room unit based on guest preferences
+      roomUnit = selectRoomUnit(availableUnitsList, data.guestPreferences);
+    }
+    
+    // Calculate total amount (consider seasonal pricing)
+    const basePrice = parseFloat(roomType.price);
+    const seasonalMultiplier = getSeasonalPricingMultiplier(roomType, checkinDate);
+    const totalAmount = (basePrice * nights * seasonalMultiplier).toFixed(2);
+    
+    // Generate booking reference
+    const bookingReference = generateBookingReference();
+    
+    // Create booking
+    const booking = await Booking.create({ 
+      ...data, 
+      roomUnitId: roomUnit._id,
+      checkinDate, 
+      checkoutDate, 
+      totalAmount, 
+      paymentStatus: 'pending', 
+      status: 'pending',
+      bookingReference,
+      roomUnitNumber: roomUnit.unitNumber,
+      roomTypeName: roomType.name
+    });
+    
+    // Check if Paystack is configured
+    if (!isPaystackConfigured()) {
+      console.warn('Paystack not configured, using sandbox mode');
+    }
+    
+    // Initialize Paystack transaction
+    const paystackResult = await initializePaystackTransaction({
+      amount: parseFloat(totalAmount),
+      email: data.guestEmail,
+      reference: bookingReference,
+      metadata: {
+        bookingId: booking._id.toString(),
+        roomName: roomType.name,
+        roomUnit: roomUnit.unitNumber,
+        guestName: data.guestName,
+        checkinDate: checkinDate.toISOString(),
+        checkoutDate: checkoutDate.toISOString()
+      },
+      currency: 'ZAR', // South African Rand
+      callback_url: `${process.env.BASE_URL || 'http://localhost:3000'}/booking.html?payment=callback&reference=${bookingReference}`
+    });
+    
+    if (!paystackResult.success) {
+      return res.status(500).json({ 
+        message: 'Failed to initialize payment', 
+        error: paystackResult.error 
+      });
+    }
+    
+    res.status(201).json({ 
+      booking, 
+      payment: { 
+        reference: bookingReference,
+        authorizationUrl: paystackResult.data.authorization_url,
+        accessCode: paystackResult.data.access_code
+      } 
+    });
+  } catch (e) { 
+    console.error(e); 
+    res.status(500).json({ message: 'Failed to create booking with payment' }); 
+  }
 });
 
 export default router;
