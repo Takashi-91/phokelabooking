@@ -15,9 +15,12 @@
                 <div class="flex items-center">
                     <a href="/" class="flex-shrink-0 flex items-center">
                         <div class="rounded-lg mr-3">
-                            <img class="w-10 h-10" src="/images//logo.2.png" loading="lazy" alt="Phokela Guest House">
+                            <img class="w-32 h-auto max-w-full" 
+     src="/images/logo2-0bg.png" 
+     loading="lazy" 
+     alt="Phokela Guest House">
                         </div>
-                        <span class="text-xl font-bold text-gray-900">Phokela Guest House</span>
+                       
                     </a>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
@@ -47,162 +50,175 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="pt-20 pb-16 bg-slate-900 text-white">
+   <!-- About Section -->
+    
+   ` <header class="relative bg-cover bg-center md:h-40 h-96" style="background-image: url('/images/hero-bg3.jpg');">
+  <!-- Dark overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <!-- Title -->
+    <h1 class="text-4xl md:text-5xl lg:text-6xl text-white font-bold z-10">
+      About
+    </h1>
+  </div>
+</header>
+    <section id="about" class="pt-5 min-h-screen bg-orange-50">
+        <!-- Main About Section -->
+        <section class="py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <div class="mb-6">
-                    <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-info-circle text-white text-2xl"></i>
-                    </div>
-                </div>
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">About Phokela Guest House</h1>
-                <p class="text-xl text-gray-300">Discover our story, our passion, and our commitment to exceptional hospitality</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Our Story -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h2 class="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
-                    <p class="text-lg text-gray-600 mb-6">
-                        Founded in 2010, Phokela Guest House began as a dream to create a sanctuary where travelers could experience the natural beauty of South Africa while enjoying world-class hospitality. What started as a small family-run establishment has grown into a premier destination that welcomes guests from around the world.
-                    </p>
-                    <p class="text-lg text-gray-600 mb-6">
-                        Our name "Phokela" means "to rest" in the local language, and that's exactly what we provide - a peaceful retreat where you can unwind, recharge, and create lasting memories. Nestled in the heart of the mountains, our guest house offers breathtaking views and a tranquil atmosphere that's perfect for both relaxation and adventure.
-                    </p>
-                    <p class="text-lg text-gray-600">
-                        Today, we continue to uphold the values of family, community, and exceptional service that have been our foundation since day one. Every guest who walks through our doors becomes part of the Phokela family.
-                    </p>
-                </div>
-                <div>
-                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&h=600" 
-                         alt="Phokela Guest House exterior" 
-                         class="rounded-lg shadow-xl">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Our Values -->
-    <section class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Values</h2>
-                <p class="text-xl text-gray-600">The principles that guide everything we do</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-heart text-2xl text-blue-600"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-4 text-center">Hospitality</h3>
-                    <p class="text-gray-600 text-center">We treat every guest like family, ensuring their comfort and satisfaction is our top priority.</p>
-                </div>
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-leaf text-2xl text-blue-600"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-4 text-center">Sustainability</h3>
-                    <p class="text-gray-600 text-center">We're committed to protecting our beautiful environment through eco-friendly practices and local partnerships.</p>
-                </div>
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-star text-2xl text-blue-600"></i>
-                    </div>
-                    <h3 class="text-xl font-semibold mb-4 text-center">Excellence</h3>
-                    <p class="text-gray-600 text-center">We continuously strive to exceed expectations and provide exceptional experiences for all our guests.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Our Team -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
-                <p class="text-xl text-gray-600">The dedicated people who make your stay memorable</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&h=400" 
-                         alt="John Smith" 
-                         class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
-                    <h3 class="text-xl font-semibold mb-2">John Smith</h3>
-                    <p class="text-blue-600 mb-2">General Manager</p>
-                    <p class="text-gray-600">With over 15 years in hospitality, John ensures every aspect of your stay is perfect.</p>
-                </div>
-                <div class="text-center">
-                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&w=400&h=400" 
-                         alt="Sarah Johnson" 
-                         class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
-                    <h3 class="text-xl font-semibold mb-2">Sarah Johnson</h3>
-                    <p class="text-blue-600 mb-2">Head Chef</p>
-                    <p class="text-gray-600">Sarah creates culinary masterpieces using fresh, local ingredients and traditional recipes.</p>
-                </div>
-                <div class="text-center">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&h=400" 
-                         alt="Mike Wilson" 
-                         class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
-                    <h3 class="text-xl font-semibold mb-2">Mike Wilson</h3>
-                    <p class="text-blue-600 mb-2">Concierge</p>
-                    <p class="text-gray-600">Mike knows all the best local attractions and can help plan your perfect day.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Location -->
-    <section class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h2 class="text-4xl font-bold text-gray-900 mb-6">Our Location</h2>
-                    <p class="text-lg text-gray-600 mb-6">
-                        Phokela Guest House is strategically located in the heart of the Drakensberg Mountains, offering easy access to some of South Africa's most spectacular natural attractions. Our prime location provides the perfect balance of seclusion and convenience.
-                    </p>
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <i class="fas fa-mountain text-blue-600 mr-3"></i>
-                            <span class="text-gray-700">5 minutes from Drakensberg National Park</span>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="fade-in-left">
+                        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                            About <span class="text-gray-900">Phokela Guest House</span>
+                        </h1>
+                        <p class="text-lg text-gray-700 mb-6">
+                            Established in 2010, Phokela Guest House has been providing authentic South African hospitality 
+                            for over a decade. Nestled in the heart of the beautiful Limpopo province, our guest house 
+                            offers a perfect blend of traditional architecture and modern comfort.
+                        </p>
+                        <p class="text-lg text-gray-700 mb-8">
+                            Our mission is to create memorable experiences for every guest while showcasing the rich 
+                            culture and natural beauty of South Africa. From our warm staff to our carefully designed 
+                            rooms, every detail reflects our commitment to excellence.
+                        </p>
+                        
+                        <!-- Amenities Grid -->
+                        <div class="grid grid-cols-2 gap-4 stagger-children">
+                            <div class="flex items-center space-x-3 hover-scale">
+                                <i class="fas fa-wifi text-orange-600 text-xl"></i>
+                                <span class="text-gray-700">Free WiFi</span>
+                            </div>
+                            <div class="flex items-center space-x-3 hover-scale">
+                                <i class="fas fa-car text-orange-600 text-xl"></i>
+                                <span class="text-gray-700">Free Parking</span>
+                            </div>
+                            <div class="flex items-center space-x-3 hover-scale">
+                                <i class="fas fa-swimming-pool text-orange-600 text-xl"></i>
+                                <span class="text-gray-700">Swimming Pool</span>
+                            </div>
+                            <div class="flex items-center space-x-3 hover-scale">
+                                <i class="fas fa-couch text-orange-600 text-xl"></i>
+                                <span class="text-gray-700">Lounge Area</span>
+                            </div>
+                            <div class="flex items-center space-x-3 hover-scale">
+                                <i class="fas fa-leaf text-orange-600 text-xl"></i>
+                                <span class="text-gray-700">Nature Walks</span>
+                            </div>
+                            <div class="flex items-center space-x-3 hover-scale">
+                                <i class="fas fa-home text-orange-600 text-xl"></i>
+                                <span class="text-gray-700">Daily Housekeeping</span>
+                            </div>
                         </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-plane text-blue-600 mr-3"></i>
-                            <span class="text-gray-700">2 hours from King Shaka International Airport</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-car text-blue-600 mr-3"></i>
-                            <span class="text-gray-700">Free parking available on-site</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-wifi text-blue-600 mr-3"></i>
-                            <span class="text-gray-700">Complimentary high-speed WiFi throughout</span>
+                    </div>
+                    
+                    <div class="relative fade-in-right">
+                        <img 
+                            src="/images/hero-bg3.jpg"
+                            alt="Phokela Guest House Building" 
+                            class="rounded-2xl shadow-xl w-full h-auto hover-scale"
+                        />
+                        <div class="absolute -bottom-6 -right-6 bg-orange-600 text-white p-6 rounded-xl shadow-lg scale-in">
+                            <h3 class="text-2xl text-white font-bold mb-2">12+ Years</h3>
+                            <p class="text-sm text-white">of Excellence</p>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div class="bg-gray-300 h-96 rounded-lg flex items-center justify-center">
-                        <p class="text-gray-600">Interactive Map Would Go Here</p>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 stagger-children">
+                    <div class="bg-transparent text-center p-8 hover-lift">
+                        <i class="fas fa-map-marker-alt text-black text-3xl mb-4 hover-scale"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Prime Location</h3>
+                        <p class="text-gray-600">
+                            Located in the heart of Limpopo province, close to major attractions and nature reserves
+                        </p>
+                    </div>
+
+                    <div class="bg-transparent text-center p-8 hover-lift">
+                        <i class="fas fa-award text-black text-3xl mb-4 hover-scale"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Award Winning</h3>
+                        <p class="text-gray-600">
+                            Recognized for outstanding hospitality and commitment to sustainable tourism
+                        </p>
+                    </div>
+
+                    <div class="bg-transparent text-center p-8 hover-lift">
+                        <i class="fas fa-leaf text-black text-3xl mb-4 hover-scale"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Eco Friendly</h3>
+                        <p class="text-gray-600">
+                            Committed to environmental conservation and sustainable practices
+                        </p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Call to Action -->
-    <section class="py-20 bg-blue-600 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-bold mb-4">Ready to Experience Phokela?</h2>
-            <p class="text-xl mb-8">Book your stay today and discover why our guests keep coming back</p>
-            <a href="/booking.html" class="bg-white text-blue-600 hover:bg-gray-100 font-bold py-3 px-8 rounded-lg text-lg transition duration-300">
-                Book Your Stay
-            </a>
-        </div>
-    </section>
+        <!-- History Section -->
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 fade-in">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Story</h2>
+                    <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                        A journey of passion, dedication, and South African hospitality
+                    </p>
+                </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6 fade-in-left">
+                        <div class="card-entrance">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">The Beginning</h3>
+                            <p class="text-gray-700">
+                                Founded by the Phokela family in 2010, our guest house started as a dream to share 
+                                the beauty of South African culture and hospitality with visitors from around the world.
+                            </p>
+                        </div>
+                        
+                        <div class="card-entrance">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">Growth & Recognition</h3>
+                            <p class="text-gray-700">
+                                Over the years, we've expanded our facilities while maintaining our commitment to 
+                                personalized service and authentic experiences. Our efforts have been recognized 
+                                with numerous hospitality awards.
+                            </p>
+                        </div>
+
+                        <div class="card-entrance">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">Looking Forward</h3>
+                            <p class="text-gray-700">
+                                Today, we continue to evolve while staying true to our roots, offering modern 
+                                comfort in a setting that celebrates South African heritage and natural beauty.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 fade-in-right stagger-children">
+                        <img 
+                            src="/images/lounge.jpg" 
+                            alt="Restaurant"
+                            class="rounded-lg shadow-md w-full h-48 object-cover hover-scale"
+                        />
+                        <img 
+                            src="/images/pool.jpg" 
+                            alt="Pool Area"
+                            class="rounded-lg shadow-md w-full h-48 object-cover hover-scale"
+                        />
+                        <img 
+                            src="/images/recreation.jpg" 
+                            alt="Recreation Area"
+                            class="rounded-lg shadow-md w-full h-48 object-cover hover-scale"
+                        />
+                        <img 
+                            src="/images/Garden.jpg" 
+                            alt="Gardens"
+                            class="rounded-lg shadow-md w-full h-48 object-cover hover-scale"
+                        />
+                    </div>
+                </div>
+            </div>
+        </section>
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

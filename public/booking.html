@@ -15,9 +15,12 @@
                 <div class="flex items-center">
                     <a href="/" class="flex-shrink-0 flex items-center">
                         <div class="rounded-lg mr-3">
-                            <img class="w-10 h-10" src="/images//logo.2.png" loading="lazy" alt="Phokela Guest House">
+                          <img class="w-32 h-auto max-w-full" 
+     src="/images/logo2-0bg.png" 
+     loading="lazy" 
+     alt="Phokela Guest House">
                         </div>
-                        <span class="text-xl font-bold text-gray-900">Phokela Guest House</span>
+                       
                     </a>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
@@ -47,19 +50,16 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="pt-20 pb-16 bg-slate-900 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <div class="mb-6">
-                    <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-calendar-check text-white text-2xl"></i>
-                    </div>
-                </div>
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">Book Your Stay</h1>
-                <p class="text-xl text-gray-300">Experience luxury and comfort in the heart of nature</p>
-            </div>
-        </div>
-    </section>
+    
+   ` <header class="relative bg-cover bg-center h-96" style="background-image: url('/images/hero-bg3.jpg');">
+  <!-- Dark overlay -->
+  <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <!-- Title -->
+    <h1 class="text-4xl md:text-5xl lg:text-6xl text-white font-bold z-10">
+      Booking Your Stay at Phokela Guest House
+    </h1>
+  </div>
+</header>
 
     <!-- Booking Form -->
     <section class="py-20">
@@ -67,7 +67,7 @@
             <div class="grid lg:grid-cols-3 gap-12">
                 <!-- Booking Form -->
                 <div class="lg:col-span-2">
-                    <div class="bg-white rounded-lg shadow-lg p-8">
+                    <div class="bg-transparent p-8">
                         <h2 class="text-3xl font-bold text-gray-900 mb-8">Reservation Details</h2>
                         
                         <!-- Step 1: Room Selection -->
@@ -208,7 +208,7 @@
 
                 <!-- Booking Summary Sidebar -->
                 <div class="lg:col-span-1">
-                    <div class="bg-white rounded-lg shadow-lg p-6 sticky top-24">
+                    <div class="bg-white p-6 sticky top-24">
                         <h3 class="text-xl font-semibold mb-6">Your Selection</h3>
                         <div id="booking-sidebar">
                             <div class="text-center text-gray-500 py-8">

@@ -197,6 +197,11 @@ const api = {
         return this.request('/bookings');
     },
 
+    // Get booking by reference
+    getBookingByReference: function(reference) {
+        return this.request(`/bookings/reference/${reference}`);
+    },
+
     // Admin login
     adminLogin: function(credentials) {
         return this.request('/admin/login', {

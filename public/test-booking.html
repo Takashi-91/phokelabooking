@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Flow Test - Phokela Guest House</title>
+    <link href="/css/compiled.css" rel="stylesheet">
+    <style>
+        .test-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .test-section { background: #f8f9fa; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #007bff; }
+        .test-result { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .button:hover { background: #0056b3; }
+        .button:disabled { background: #6c757d; cursor: not-allowed; }
+        .json-display { background: #f8f9fa; padding: 15px; border-radius: 4px; font-family: monospace; white-space: pre-wrap; font-size: 12px; max-height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Booking Flow Test Suite</h1>
+        <p>This page tests all components of the booking flow to ensure everything is working properly.</p>
+        
+        <!-- API Health Check -->
+        <div class="test-section">
+            <h3>1️⃣ API Health Check</h3>
+            <button class="button" onclick="testAPIHealth()">Test API Health</button>
+            <div id="health-result"></div>
+        </div>
+        
+        <!-- Room Types Test -->
+        <div class="test-section">
+            <h3>2️⃣ Room Types</h3>
+            <button class="button" onclick="testRoomTypes()">Load Room Types</button>
+            <div id="room-types-result"></div>
+        </div>
+        
+        <!-- Payment Configuration -->
+        <div class="test-section">
+            <h3>3️⃣ Payment Configuration</h3>
+            <button class="button" onclick="testPaymentConfig()">Check Payment Config</button>
+            <div id="payment-config-result"></div>
+        </div>
+        
+        <!-- Email Service Test -->
+        <div class="test-section">
+            <h3>4️⃣ Email Service</h3>
+            <button class="button" onclick="testEmailService()">Test Email Service</button>
+            <div id="email-result"></div>
+        </div>
+        
+        <!-- Room Availability Test -->
+        <div class="test-section">
+            <h3>5️⃣ Room Availability</h3>
+            <button class="button" onclick="testRoomAvailability()">Test Room Availability</button>
+            <div id="availability-result"></div>
+        </div>
+        
+        <!-- Booking Creation Test -->
+        <div class="test-section">
+            <h3>6️⃣ Booking Creation</h3>
+            <button class="button" onclick="testBookingCreation()">Test Booking Creation</button>
+            <div id="booking-result"></div>
+        </div>
+        
+        <!-- Payment Verification Test -->
+        <div class="test-section">
+            <h3>7️⃣ Payment Verification</h3>
+            <button class="button" onclick="testPaymentVerification()">Test Payment Verification</button>
+            <div id="payment-verify-result"></div>
+        </div>
+        
+        <!-- Complete Flow Test -->
+        <div class="test-section">
+            <h3>8️⃣ Complete Flow Test</h3>
+            <button class="button" onclick="runCompleteTest()">Run Complete Test</button>
+            <div id="complete-test-result"></div>
+        </div>
+        
+        <!-- Test Results Summary -->
+        <div class="test-section">
+            <h3>📊 Test Results Summary</h3>
+            <div id="test-summary"></div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script>
+        let testResults = {};
+        
+        function showResult(elementId, success, message, data = null) {
+            const element = document.getElementById(elementId);
+            const resultClass = success ? 'success' : 'error';
+            let html = `<div class="test-result ${resultClass}">${message}</div>`;
+            
+            if (data) {
+                html += `<div class="json-display">${JSON.stringify(data, null, 2)}</div>`;
+            }
+            
+            element.innerHTML = html;
+        }
+        
+        async function testAPIHealth() {
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResult('health-result', true, '✅ API is healthy and responding', data);
+                    testResults.health = true;
+                } else {
+                    showResult('health-result', false, '❌ API health check failed', data);
+                    testResults.health = false;
+                }
+            } catch (error) {
+                showResult('health-result', false, `❌ API health check error: ${error.message}`);
+                testResults.health = false;
+            }
+        }
+        
+        async function testRoomTypes() {
+            try {
+                const response = await api.getRoomTypes();
+                showResult('room-types-result', true, `✅ Found ${response.length} room types`, response);
+                testResults.roomTypes = true;
+                window.roomTypes = response; // Store for other tests
+            } catch (error) {
+                showResult('room-types-result', false, `❌ Failed to load room types: ${error.message}`);
+                testResults.roomTypes = false;
+            }
+        }
+        
+        async function testPaymentConfig() {
+            try {
+                const response = await api.getPaymentConfig();
+                showResult('payment-config-result', true, `✅ Payment configured: ${response.configured}`, response);
+                testResults.paymentConfig = true;
+            } catch (error) {
+                showResult('payment-config-result', false, `❌ Failed to get payment config: ${error.message}`);
+                testResults.paymentConfig = false;
+            }
+        }
+        
+        async function testEmailService() {
+            try {
+                const response = await fetch('/api/test-email', { method: 'POST' });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showResult('email-result', true, '✅ Email service working', data);
+                    testResults.email = true;
+                } else {
+                    showResult('email-result', false, `❌ Email service failed: ${data.message}`, data);
+                    testResults.email = false;
+                }
+            } catch (error) {
+                showResult('email-result', false, `❌ Email service error: ${error.message}`);
+                testResults.email = false;
+            }
+        }
+        
+        async function testRoomAvailability() {
+            if (!window.roomTypes || window.roomTypes.length === 0) {
+                showResult('availability-result', false, '❌ Please load room types first');
+                return;
+            }
+            
+            try {
+                const roomType = window.roomTypes[0];
+                const checkinDate = new Date();
+                checkinDate.setDate(checkinDate.getDate() + 7);
+                const checkoutDate = new Date(checkinDate);
+                checkoutDate.setDate(checkoutDate.getDate() + 2);
+                
+                const response = await api.checkRoomTypeAvailability(
+                    roomType._id,
+                    checkinDate.toISOString().split('T')[0],
+                    checkoutDate.toISOString().split('T')[0],
+                    2
+                );
+                
+                showResult('availability-result', true, `✅ Room availability check: ${response.available ? 'Available' : 'Not available'}`, response);
+                testResults.availability = true;
+            } catch (error) {
+                showResult('availability-result', false, `❌ Room availability check failed: ${error.message}`);
+                testResults.availability = false;
+            }
+        }
+        
+        async function testBookingCreation() {
+            if (!window.roomTypes || window.roomTypes.length === 0) {
+                showResult('booking-result', false, '❌ Please load room types first');
+                return;
+            }
+            
+            try {
+                const roomType = window.roomTypes[0];
+                const checkinDate = new Date();
+                checkinDate.setDate(checkinDate.getDate() + 7);
+                const checkoutDate = new Date(checkinDate);
+                checkoutDate.setDate(checkoutDate.getDate() + 2);
+                
+                const bookingData = {
+                    roomTypeId: roomType._id,
+                    guestName: 'Test User',
+                    guestEmail: 'test@example.com',
+                    guestPhone: '+27123456789',
+                    checkinDate: checkinDate.toISOString().split('T')[0],
+                    checkoutDate: checkoutDate.toISOString().split('T')[0],
+                    numberOfGuests: 2,
+                    specialRequests: 'Test booking for flow verification',
+                    guestPreferences: {
+                        smoking: false,
+                        accessibility: false,
+                        floor: '',
+                        view: ''
+                    }
+                };
+                
+                const response = await api.createBooking(bookingData);
+                showResult('booking-result', true, '✅ Booking created successfully', response);
+                testResults.booking = true;
+                window.testBooking = response; // Store for payment verification test
+            } catch (error) {
+                showResult('booking-result', false, `❌ Booking creation failed: ${error.message}`);
+                testResults.booking = false;
+            }
+        }
+        
+        async function testPaymentVerification() {
+            if (!window.testBooking) {
+                showResult('payment-verify-result', false, '❌ Please create a booking first');
+                return;
+            }
+            
+            try {
+                const response = await api.verifyPayment({
+                    reference: window.testBooking.booking.bookingReference
+                });
+                
+                showResult('payment-verify-result', true, `✅ Payment verification: ${response.paid ? 'PAID' : 'NOT PAID'}`, response);
+                testResults.paymentVerification = true;
+            } catch (error) {
+                showResult('payment-verify-result', false, `❌ Payment verification failed: ${error.message}`);
+                testResults.paymentVerification = false;
+            }
+        }
+        
+        async function runCompleteTest() {
+            const completeResult = document.getElementById('complete-test-result');
+            completeResult.innerHTML = '<div class="test-result info">🔄 Running complete test suite...</div>';
+            
+            // Run all tests in sequence
+            await testAPIHealth();
+            await testRoomTypes();
+            await testPaymentConfig();
+            await testEmailService();
+            await testRoomAvailability();
+            await testBookingCreation();
+            await testPaymentVerification();
+            
+            // Show summary
+            updateTestSummary();
+        }
+        
+        function updateTestSummary() {
+            const summary = document.getElementById('test-summary');
+            const totalTests = Object.keys(testResults).length;
+            const passedTests = Object.values(testResults).filter(Boolean).length;
+            const failedTests = totalTests - passedTests;
+            
+            let html = `<div class="test-result ${failedTests === 0 ? 'success' : 'error'}">`;
+            html += `📊 Test Summary: ${passedTests}/${totalTests} tests passed`;
+            if (failedTests > 0) {
+                html += ` (${failedTests} failed)`;
+            }
+            html += '</div>';
+            
+            // Show individual test results
+            html += '<div class="json-display">';
+            html += JSON.stringify(testResults, null, 2);
+            html += '</div>';
+            
+            summary.innerHTML = html;
+        }
+        
+        // Auto-run basic tests on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Booking Flow Test Suite loaded');
+            testAPIHealth();
+        });
+    </script>
+</body>
+</html>

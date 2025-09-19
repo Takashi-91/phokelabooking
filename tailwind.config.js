@@ -22,7 +22,7 @@ module.exports = {
         },
         // Rich browns from the hat
         brown: {
-          50: '#faf8f6',
+          50: '#87694d',
           100: '#f5f0eb',
           200: '#ebe1d6',
           300: '#e1d2c1',

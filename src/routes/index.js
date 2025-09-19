@@ -338,6 +338,33 @@ router.get('/admin/bookings', requireAdmin, async (_req, res) => {
   catch (e) { console.error(e); res.status(500).json({ message: 'Failed to fetch bookings' }); }
 });
 
+// Get booking by reference (for admin and customer lookup)
+router.get('/bookings/reference/:reference', async (req, res) => {
+  try {
+    const { reference } = req.params;
+    const booking = await Booking.findOne({ bookingReference: reference })
+      .populate('roomUnitId', 'unitNumber unitName floor status')
+      .populate('roomTypeId', 'name type price maxGuests amenities');
+    
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+    
+    const result = { 
+      ...booking.toObject(), 
+      room: booking.roomTypeId, 
+      roomUnit: booking.roomUnitId,
+      roomId: booking.roomTypeId?._id?.toString(),
+      roomUnitId: booking.roomUnitId?._id?.toString()
+    };
+    
+    res.json(result);
+  } catch (e) { 
+    console.error(e); 
+    res.status(500).json({ message: 'Failed to fetch booking' }); 
+  }
+});
+
 router.patch('/admin/bookings/:id', requireAdmin, async (req, res) => {
   try { 
     const updated = await Booking.findByIdAndUpdate(req.params.id, req.body, { new: true })
@@ -376,6 +403,42 @@ router.get('/admin/stats', requireAdmin, async (_req, res) => {
 router.post('/contact', async (req, res) => {
   try { const data = insertContactMessageSchema.parse(req.body); const message = await ContactMessage.create(data); res.status(201).json(message); }
   catch (e) { console.error(e); res.status(500).json({ message: 'Failed to send message' }); }
+});
+
+// Test email endpoint (for development/testing)
+router.post('/test-email', async (req, res) => {
+  try {
+    const testBooking = {
+      _id: 'test-booking-123',
+      bookingReference: 'PHK-25-TEST123',
+      guestName: 'Test User',
+      guestEmail: 'test@example.com',
+      checkinDate: new Date('2024-02-15'),
+      checkoutDate: new Date('2024-02-17'),
+      numberOfGuests: 2,
+      totalAmount: '1700.00',
+      specialRequests: 'Test booking for email verification',
+      room: {
+        name: 'Deluxe Suite',
+        maxGuests: 4
+      },
+      roomUnit: {
+        unitName: 'Deluxe Suite #201',
+        unitNumber: '201'
+      }
+    };
+    
+    const result = await sendBookingConfirmation(testBooking);
+    
+    if (result.success) {
+      res.json({ message: 'Test email sent successfully!', messageId: result.messageId });
+    } else {
+      res.status(500).json({ message: 'Failed to send test email', error: result.error });
+    }
+  } catch (e) {
+    console.error('Test email error:', e);
+    res.status(500).json({ message: 'Test email failed', error: e.message });
+  }
 });
 
 router.get('/admin/contact', requireAdmin, async (_req, res) => {
@@ -450,33 +513,52 @@ router.post('/payments/verify', async (req, res) => {
     const { reference } = req.body; 
     if (!reference) return res.status(400).json({ message: 'reference required' }); 
     
+    console.log(`🔍 Verifying payment for reference: ${reference}`);
+    
     const verification = await verifyPaystackTransaction(reference);
+    console.log(`📊 Paystack verification result:`, verification);
     
     if (verification.success) {
       const isPaid = verification.data.status === 'success';
+      console.log(`💰 Payment status: ${isPaid ? 'PAID' : 'NOT PAID'}`);
       
       // If payment is successful, find and update the booking
       if (isPaid) {
         const booking = await Booking.findOne({ bookingReference: reference });
+        console.log(`📋 Found booking:`, booking ? booking._id : 'NOT FOUND');
+        
         if (booking && booking.paymentStatus !== 'paid') {
-          await Booking.findByIdAndUpdate(booking._id, { 
+          // Update booking status to confirmed and paid
+          const updatedBooking = await Booking.findByIdAndUpdate(booking._id, { 
             paymentStatus: 'paid', 
             status: 'confirmed',
             paymentId: verification.data.id,
             paymentMethod: 'paystack',
             paidAt: new Date()
-          });
-          
-          // Send confirmation email
-          const updatedBooking = await Booking.findById(booking._id)
+          }, { new: true })
             .populate('roomUnitId', 'unitNumber unitName floor status')
             .populate('roomTypeId', 'name type price maxGuests amenities');
             
           if (updatedBooking) {
-            const bookingWithRoom = { ...updatedBooking.toObject(), room: updatedBooking.roomTypeId, roomUnit: updatedBooking.roomUnitId };
-            await sendBookingConfirmation(bookingWithRoom);
-            console.log(`Booking ${booking._id} confirmed via verification and email sent`);
+            // Send confirmation email
+            const bookingWithRoom = { 
+              ...updatedBooking.toObject(), 
+              room: updatedBooking.roomTypeId, 
+              roomUnit: updatedBooking.roomUnitId 
+            };
+            
+            try {
+              await sendBookingConfirmation(bookingWithRoom);
+              console.log(`✅ Booking ${booking._id} confirmed and confirmation email sent to ${booking.guestEmail}`);
+            } catch (emailError) {
+              console.error('❌ Failed to send confirmation email:', emailError);
+              // Don't fail the payment verification if email fails
+            }
           }
+        } else if (booking && booking.paymentStatus === 'paid') {
+          console.log(`Booking ${booking._id} already confirmed`);
+        } else {
+          console.log(`No booking found for reference ${reference}`);
         }
       }
       
@@ -486,6 +568,7 @@ router.post('/payments/verify', async (req, res) => {
         amount: verification.data.amount / 100, // Convert from cents
         currency: verification.data.currency,
         reference: verification.data.reference,
+        bookingConfirmed: isPaid && booking ? true : false,
         raw: verification.data 
       });
     } else {
@@ -509,27 +592,45 @@ router.post('/payments/webhook', async (req, res) => {
     if (event.event === 'charge.success') {
       const { reference, metadata } = event.data;
       
-      if (reference && metadata?.bookingId) {
-        // Verify the transaction with Paystack
-        const verification = await verifyPaystackTransaction(reference);
+      if (reference) {
+        // Find booking by reference (more reliable than metadata.bookingId)
+        const booking = await Booking.findOne({ bookingReference: reference });
         
-        if (verification.success && verification.data.status === 'success') {
-          const booking = await Booking.findByIdAndUpdate(metadata.bookingId, { 
-            paymentStatus: 'paid', 
-            status: 'confirmed',
-            paymentId: verification.data.id,
-            paymentMethod: 'paystack',
-            paidAt: new Date()
-          })
-            .populate('roomUnitId', 'unitNumber unitName floor status')
-            .populate('roomTypeId', 'name type price maxGuests amenities');
-            
-          if (booking) {
-            // Send confirmation email
-            const bookingWithRoom = { ...booking.toObject(), room: booking.roomTypeId, roomUnit: booking.roomUnitId };
-            await sendBookingConfirmation(bookingWithRoom);
-            console.log(`Booking ${metadata.bookingId} confirmed and email sent`);
+        if (booking && booking.paymentStatus !== 'paid') {
+          // Verify the transaction with Paystack
+          const verification = await verifyPaystackTransaction(reference);
+          
+          if (verification.success && verification.data.status === 'success') {
+            const updatedBooking = await Booking.findByIdAndUpdate(booking._id, { 
+              paymentStatus: 'paid', 
+              status: 'confirmed',
+              paymentId: verification.data.id,
+              paymentMethod: 'paystack',
+              paidAt: new Date()
+            }, { new: true })
+              .populate('roomUnitId', 'unitNumber unitName floor status')
+              .populate('roomTypeId', 'name type price maxGuests amenities');
+              
+            if (updatedBooking) {
+              // Send confirmation email
+              const bookingWithRoom = { 
+                ...updatedBooking.toObject(), 
+                room: updatedBooking.roomTypeId, 
+                roomUnit: updatedBooking.roomUnitId 
+              };
+              
+              try {
+                await sendBookingConfirmation(bookingWithRoom);
+                console.log(`✅ Webhook: Booking ${booking._id} confirmed and email sent to ${booking.guestEmail}`);
+              } catch (emailError) {
+                console.error('❌ Webhook: Failed to send confirmation email:', emailError);
+              }
+            }
           }
+        } else if (booking && booking.paymentStatus === 'paid') {
+          console.log(`Webhook: Booking ${booking._id} already confirmed`);
+        } else {
+          console.log(`Webhook: No booking found for reference ${reference}`);
         }
       }
     }
@@ -558,24 +659,29 @@ router.post('/bookings/with-payment', async (req, res) => {
     
     // Check minimum stay requirement
     const nights = Math.ceil((checkoutDate - checkinDate) / (1000*60*60*24));
-    if (nights < roomType.minStay) {
-      return res.status(400).json({ message: `Minimum stay is ${roomType.minStay} nights` });
+    const minStay = roomType.minStay || 1;
+    const maxStay = roomType.maxStay || 30;
+    
+    if (nights < minStay) {
+      return res.status(400).json({ message: `Minimum stay is ${minStay} nights` });
     }
     
     // Check maximum stay requirement
-    if (nights > roomType.maxStay) {
-      return res.status(400).json({ message: `Maximum stay is ${roomType.maxStay} nights` });
+    if (nights > maxStay) {
+      return res.status(400).json({ message: `Maximum stay is ${maxStay} nights` });
     }
     
     // Check blackout dates
-    const isBlackedOut = roomType.blackoutDates.some(blackout => {
-      const blackoutStart = new Date(blackout.startDate);
-      const blackoutEnd = new Date(blackout.endDate);
-      return (checkinDate <= blackoutEnd && checkoutDate >= blackoutStart);
-    });
-    
-    if (isBlackedOut) {
-      return res.status(400).json({ message: 'Room type is not available for the selected dates due to blackout period' });
+    if (roomType.blackoutDates && roomType.blackoutDates.length > 0) {
+      const isBlackedOut = roomType.blackoutDates.some(blackout => {
+        const blackoutStart = new Date(blackout.startDate);
+        const blackoutEnd = new Date(blackout.endDate);
+        return (checkinDate <= blackoutEnd && checkoutDate >= blackoutStart);
+      });
+      
+      if (isBlackedOut) {
+        return res.status(400).json({ message: 'Room type is not available for the selected dates due to blackout period' });
+      }
     }
     
     // Find available room unit
@@ -610,19 +716,22 @@ router.post('/bookings/with-payment', async (req, res) => {
         ]
       });
       
-      // Check for booking conflicts
-      const conflictingBookings = await Booking.find({
-        roomTypeId: data.roomTypeId,
-        status: { $ne: 'cancelled' },
-        $or: [
-          { checkinDate: { $lte: checkoutDate }, checkoutDate: { $gte: checkinDate } }
-        ]
-      });
+      // Check for booking conflicts for each unit
+      const availableUnitsList = [];
       
-      const occupiedUnitIds = new Set(conflictingBookings.map(booking => booking.roomUnitId.toString()));
-      const availableUnitsList = availableUnits.filter(unit => 
-        !occupiedUnitIds.has(unit._id.toString())
-      );
+      for (const unit of availableUnits) {
+        const conflict = await Booking.exists({
+          roomUnitId: unit._id,
+          status: { $ne: 'cancelled' },
+          $or: [
+            { checkinDate: { $lte: checkoutDate }, checkoutDate: { $gte: checkinDate } }
+          ]
+        });
+        
+        if (!conflict) {
+          availableUnitsList.push(unit);
+        }
+      }
       
       if (availableUnitsList.length === 0) {
         return res.status(400).json({ message: 'No room units available for the selected dates' });
@@ -673,7 +782,7 @@ router.post('/bookings/with-payment', async (req, res) => {
         checkoutDate: checkoutDate.toISOString()
       },
       currency: 'ZAR', // South African Rand
-      callback_url: `${process.env.BASE_URL || 'http://localhost:3000'}/booking.html?payment=callback&reference=${bookingReference}`
+      callback_url: `${process.env.BASE_URL || 'http://localhost:5000'}/booking.html?payment=callback&reference=${bookingReference}`
     });
     
     if (!paystackResult.success) {

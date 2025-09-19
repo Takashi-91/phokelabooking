@@ -8,7 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         .hero-bg {
-            background: linear-gradient(rgba(111, 75, 39, 0.8), rgba(143, 115, 87, 0.8)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&h=1080');
+            background: linear-gradient(rgba(75, 47, 19, 0.8), rgba(143, 115, 87, 0.8)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&h=1080');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -180,6 +180,15 @@
             animation: gradient-shift 3s ease-in-out infinite;
         }
 
+         .gradient-text2 {
+            background: linear-gradient(135deg, #87694d, #ab7b4e, #9b6533);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease-in-out infinite;
+        }
+
         @keyframes gradient-shift {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -240,9 +249,12 @@
                 <div class="flex items-center">
                     <a href="/" class="flex-shrink-0 flex items-center">
                         <div class="rounded-lg mr-3">
-                            <img class="w-10 h-10" src="/images//logo.2.png" loading="lazy" alt="Phokela Guest House">
+                            <img class="w-32 h-auto max-w-full" 
+     src="/images/logo2-0bg.png" 
+     loading="lazy" 
+     alt="Phokela Guest House">
+
                         </div>
-                        <span class="text-xl font-bold text-gray-900">Phokela Guest House</span>
                     </a>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
@@ -287,16 +299,12 @@
                 <div class="max-w-3xl">
                     <div class="mb-8">
                         <!-- Icon -->
-                        <div class="mb-6 scale-in">
-                            <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center floating">
-                                <img class="w-10 h-10" src="/images//logo.2.png" loading="lazy" alt="Phokela Guest House">
-                            </div>
-                        </div>
+                        
                         
                         <!-- Main Heading -->
                         <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight fade-in">
-                            Welcome to <span class="text-orange-400 gradient-text">Phokela</span><br>
-                            Guest House
+                            Welcome to <span class="text-white">Phokela <br>Guest House</span>
+                            
                         </h1>
                         
                         <!-- Subtitle -->
@@ -382,7 +390,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="fade-in-left">
                         <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                            About <span class="gradient-text">Phokela Guest House</span>
+                            About <span class="text-gray-900">Phokela Guest House</span>
                         </h1>
                         <p class="text-lg text-gray-700 mb-6">
                             Established in 2010, Phokela Guest House has been providing authentic South African hospitality 
@@ -431,8 +439,8 @@
                             class="rounded-2xl shadow-xl w-full h-auto hover-scale"
                         />
                         <div class="absolute -bottom-6 -right-6 bg-orange-600 text-white p-6 rounded-xl shadow-lg scale-in">
-                            <h3 class="text-2xl font-bold mb-2">12+ Years</h3>
-                            <p class="text-sm opacity-90">of Excellence</p>
+                            <h3 class="text-2xl text-white font-bold mb-2">12+ Years</h3>
+                            <p class="text-sm text-white">of Excellence</p>
                         </div>
                     </div>
                 </div>
@@ -628,7 +636,7 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <!-- Contact Form -->
-                <div class="bg-white shadow-lg rounded-lg fade-in-left">
+                <div class="bg-transparent fade-in-left">
                     <div class="p-8">
                         <h2 class="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
                         <form id="contact-form" class="space-y-6">
@@ -737,7 +745,7 @@
 
                 <!-- Contact Information -->
                 <div class="space-y-8 fade-in-right">
-                    <div class="bg-white shadow-lg rounded-lg hover-lift">
+                    <div class="bg-transparent ">
                         <div class="p-8">
                             <h2 class="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h2>
                             <div class="space-y-6">
@@ -784,26 +792,7 @@
                                     </div>
                                 </div>
 
-                                <div class="pt-6 border-t border-gray-200">
-                                    <h4 class="font-semibold text-gray-900 mb-3">Follow Us</h4>
-                                    <div class="flex space-x-4">
-                                        <a href="#" class="text-gray-400 hover:text-orange-600 transition-colors">
-                                            <i class="fab fa-facebook text-2xl"></i>
-                                        </a>
-                                        <a href="#" class="text-gray-400 hover:text-orange-600 transition-colors">
-                                            <i class="fab fa-instagram text-2xl"></i>
-                                        </a>
-                                        <a href="#" class="text-gray-400 hover:text-orange-600 transition-colors">
-                                            <i class="fab fa-twitter text-2xl"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Map -->
-                    <div class="bg-white shadow-lg rounded-lg hover-lift">
+                                <div class="bg-transparent hover-lift">
                         <div class="p-4">
                             <div class="w-full h-64 bg-gray-200 rounded-lg overflow-hidden">
                                 <iframe
@@ -818,33 +807,11 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Business Hours -->
-                    <div class="bg-white shadow-lg rounded-lg hover-lift">
-                        <div class="p-8">
-                            <h3 class="text-xl font-bold text-gray-900 mb-6">Business Hours</h3>
-                            <div class="space-y-2">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Monday - Friday</span>
-                                    <span class="font-medium">8:00 AM - 6:00 PM</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Saturday</span>
-                                    <span class="font-medium">9:00 AM - 5:00 PM</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Sunday</span>
-                                    <span class="font-medium">10:00 AM - 4:00 PM</span>
-                                </div>
-                                <div class="pt-2 border-t border-gray-200">
-                                    <div class="flex justify-between">
-                                        <span class="text-gray-600">24/7 Emergency</span>
-                                        <span class="font-medium text-orange-600">Available</span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
+
+                    
                 </div>
             </div>
         </div>

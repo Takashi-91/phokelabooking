@@ -205,21 +205,22 @@ router.post('/room-types/:id/available-units', async (req, res) => {
       status: 'available'
     });
     
-    // Check for booking conflicts
-    const conflictingBookings = await Booking.find({
-      roomTypeId: req.params.id,
-      status: { $ne: 'cancelled' },
-      $or: [
-        { checkinDate: { $lte: checkout }, checkoutDate: { $gte: checkin } }
-      ]
-    });
+    // Check for booking conflicts for each unit
+    const availableUnits = [];
     
-    const occupiedUnitIds = new Set(conflictingBookings.map(booking => booking.roomUnitId.toString()));
-    
-    // Filter available units
-    const availableUnits = roomUnits.filter(unit => 
-      !occupiedUnitIds.has(unit._id.toString())
-    );
+    for (const unit of roomUnits) {
+      const conflict = await Booking.exists({
+        roomUnitId: unit._id,
+        status: { $ne: 'cancelled' },
+        $or: [
+          { checkinDate: { $lte: checkout }, checkoutDate: { $gte: checkin } }
+        ]
+      });
+      
+      if (!conflict) {
+        availableUnits.push(unit);
+      }
+    }
     
     res.json(availableUnits);
     

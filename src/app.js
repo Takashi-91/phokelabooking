@@ -17,7 +17,58 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://cdnjs.cloudflare.com",
+          "https://fonts.googleapis.com", // Google Maps styles
+        ],
+
+        scriptSrc: [
+          "'self'",
+          "https://maps.googleapis.com",  // Google Maps API
+          "https://maps.gstatic.com",     // Maps resources
+        ],
+
+        imgSrc: [
+          "'self'",
+          "data:",
+          "https://images.unsplash.com",
+          "https://maps.gstatic.com",     // Map tiles, icons
+          "https://maps.googleapis.com",  // Static maps images
+        ],
+
+        connectSrc: [
+          "'self'",
+          "https://maps.googleapis.com",  // API requests
+        ],
+
+        fontSrc: [
+          "'self'",
+          "https://cdnjs.cloudflare.com",
+          "https://fonts.gstatic.com",    // Google fonts for maps
+        ],
+
+        objectSrc: ["'none'"],
+        mediaSrc: ["'self'"],
+
+        frameSrc: [
+          "'self'",
+          "https://www.google.com",       // Google Maps embed iframe
+          "https://maps.googleapis.com",
+        ],
+      },
+    },
+  })
+);
+
+
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
