@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Primary browns from the logo
+        customBrown: 'rgb(127 95 63 / <alpha-value>)',
         primary: {
           50: '#fefdfb',
           100: '#fdf9f3',

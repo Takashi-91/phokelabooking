@@ -370,62 +370,46 @@ function handlePaymentResult() {
     const reference = urlParams.get('reference');
     const trxref = urlParams.get('trxref');
     
-    console.log('🔍 Payment callback detected:', { paymentStatus, reference, trxref });
-    
     if (paymentStatus === 'success') {
-        console.log('✅ Payment success callback');
         utils.showSuccess('Payment successful! Your booking has been confirmed. You will receive a confirmation email shortly.');
         // Clear the URL parameters
         window.history.replaceState({}, document.title, window.location.pathname);
     } else if (paymentStatus === 'failed') {
-        console.log('❌ Payment failed callback');
         utils.showError('Payment failed. Please try again or contact support.');
         // Clear the URL parameters
         window.history.replaceState({}, document.title, window.location.pathname);
     } else if (paymentStatus === 'cancelled') {
-        console.log('🚫 Payment cancelled callback');
         utils.showError('Payment was cancelled. You can try again anytime.');
         // Clear the URL parameters
         window.history.replaceState({}, document.title, window.location.pathname);
     } else if (paymentStatus === 'callback' && (reference || trxref)) {
-        console.log('🔄 Paystack callback verification');
         // Handle Paystack callback - verify payment
         verifyPayment(reference || trxref);
     } else if (trxref) {
-        console.log('🔄 Direct trxref verification');
         // Handle direct Paystack return with trxref parameter
         verifyPayment(trxref);
-    } else {
-        console.log('ℹ️ No payment callback parameters found');
     }
 }
 
 async function verifyPayment(reference) {
     try {
-        console.log(`🔍 Verifying payment for reference: ${reference}`);
         utils.showLoading();
-        
         const response = await api.verifyPayment({ reference });
-        console.log('📊 Payment verification response:', response);
         
         if (response.paid) {
-            console.log('✅ Payment verified successfully');
             if (response.bookingConfirmed) {
-                console.log('✅ Booking confirmed and email sent');
                 utils.showSuccess('🎉 Payment successful! Your booking has been confirmed and a confirmation email has been sent to your email address.');
             } else {
-                console.log('⏳ Payment successful but booking confirmation pending');
                 utils.showSuccess('Payment successful! Your booking is being processed. You will receive a confirmation email shortly.');
             }
             // Clear the URL parameters and reset form
             window.history.replaceState({}, document.title, window.location.pathname);
             resetBookingForm();
         } else {
-            console.log('❌ Payment verification failed - payment not successful');
             utils.showError('Payment verification failed. Please contact support if you were charged.');
         }
     } catch (error) {
-        console.error('❌ Payment verification error:', error);
+        console.error('Payment verification failed:', error);
         utils.showError('Payment verification failed. Please contact support if you were charged.');
     } finally {
         utils.hideLoading();
@@ -438,20 +422,14 @@ function resetBookingForm() {
     selectedRoomUnit = null;
     bookingData = {};
     
-    // Reset UI - go back to step 1
-    const currentStep = document.querySelector('.booking-step:not(.hidden)');
-    if (currentStep) {
-        currentStep.classList.add('hidden');
-    }
-    
-    const step1 = document.getElementById('step-1');
-    if (step1) {
-        step1.classList.remove('hidden');
-    }
+    // Reset UI
+    document.querySelectorAll('.step').forEach(step => {
+        step.classList.remove('active');
+    });
+    document.querySelector('.step-1').classList.add('active');
     
     // Reset form fields
-    const formFields = document.querySelectorAll('input, select, textarea');
-    formFields.forEach(field => {
+    document.querySelectorAll('input, select, textarea').forEach(field => {
         if (field.type === 'checkbox') {
             field.checked = false;
         } else {
@@ -460,19 +438,10 @@ function resetBookingForm() {
     });
     
     // Reset room selection
-    document.querySelectorAll('[data-room-type-id]').forEach(card => {
-        card.classList.remove('border-blue-500', 'bg-blue-50');
-        card.classList.add('border-gray-300');
+    document.querySelectorAll('.room-card').forEach(card => {
+        card.classList.remove('selected');
     });
-    
-    // Reset next button
-    const nextButton = document.getElementById('next-step-1');
-    if (nextButton) {
-        nextButton.disabled = true;
-    }
     
     // Reset booking summary
     updateBookingSidebar();
-    
-    console.log('✅ Booking form reset successfully');
 }

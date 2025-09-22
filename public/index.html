@@ -4,15 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phokela Guest House - Your Home Away From Home</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
+<link rel="manifest" href="/favicon_io/site.webmanifest">
     <link href="/css/compiled.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        html, body { overflow-x: hidden; }
+        *, *::before, *::after { box-sizing: border-box; }
+        img, video { max-width: 100%; height: auto; }
+        .text-balance { text-wrap: balance; }
+        .break-anywhere { overflow-wrap: anywhere; word-break: break-word; }
+        .h1-hero { font-size: clamp(2rem, 6vw + 0.5rem, 4.5rem); line-height: 1.1; }
+        .hero-subtitle { font-size: clamp(1rem, 2.5vw + 0.25rem, 1.5rem); }
+        .section-title { font-size: clamp(1.5rem, 4.5vw + 0.25rem, 2.5rem); }
         .hero-bg {
             background: linear-gradient(rgba(75, 47, 19, 0.8), rgba(143, 115, 87, 0.8)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1920&h=1080');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
+        /* Parallax sections */
+        .parallax { position: relative; background-size: cover; background-position: center; background-attachment: fixed; }
+        .parallax::after { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)); pointer-events: none; }
+        .parallax-values { background-image: linear-gradient(rgba(0, 0, 0, 0.25), rgb(0 0 0)), url('/images/Garden.jpg'); }
+        
+
+        /* Disable fixed on small screens for performance */
+        @media (max-width: 768px) { .parallax { background-attachment: scroll; } }
         .logo-text {
             background: linear-gradient(135deg, #edc06f 0%, #f3d59f 50%, #f5dcaf 100%);
             -webkit-background-clip: text;
@@ -241,7 +262,7 @@
         }
     </style>
 </head>
-<body class="bg-white">
+<body class="bg-white overflow-x-hidden">
     <!-- Navigation -->
     <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -258,7 +279,7 @@
                     </a>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="/" class="text-orange-500 font-medium">Home</a>
+                    <a href="/" class="text-orange-501 font-medium">Home</a>
                     <a href="#about" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">About</a>
                     <a href="/gallery.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Gallery</a>
                     <a href="/booking.html" class="text-gray-700 hover:text-orange-500 transition-colors duration-300">Book Now</a>
@@ -302,13 +323,13 @@
                         
                         
                         <!-- Main Heading -->
-                        <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight fade-in">
+                        <h1 class="text-5xl md:text-7xl h1-hero text-balance font-bold text-white mb-6 leading-tight fade-in">
                             Welcome to <span class="text-white">Phokela <br>Guest House</span>
                             
                         </h1>
                         
                         <!-- Subtitle -->
-                        <p class="text-xl md:text-2xl text-gray-200 mb-8 leading-relaxed fade-in">
+                        <p class="text-xl md:text-2xl hero-subtitle text-gray-200 mb-8 leading-relaxed fade-in break-anywhere">
                             Experience authentic South African hospitality in the heart of nature
                         </p>
                     </div>
@@ -316,7 +337,7 @@
                     <!-- CTA Buttons -->
                     <div class="flex flex-col sm:flex-row gap-4 fade-in">
                         <a href="/booking.html" 
-                           class="btn-animate inline-flex items-center justify-center px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg text-lg">
+                           class="btn-animate inline-flex items-center justify-center px-8 py-4 bg-orange-501 hover:bg-orange-502 text-white font-semibold rounded-lg text-lg">
                             <i class="fas fa-calendar-check mr-3"></i>
                             Book Your Stay
                         </a>
@@ -335,27 +356,27 @@
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 fade-in">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Why Choose Phokela?</h2>
+                <h2 class="text-4xl md:text-3xl sm:text-2xl section-title font-bold text-gray-900 mb-4">Why Choose Phokela?</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">We provide exceptional service and comfort for all our guests, creating unforgettable memories in the heart of nature</p>
             </div>
             <div class="grid md:grid-cols-3 gap-8 stagger-children">
-                <div class="text-center group hover-lift bg-white p-8 ">
+                <div class="text-center group bg-white p-8 ">
                     <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-200 transition-colors duration-300 hover-scale">
-                        <i class="fas fa-bed text-2xl text-orange-600"></i>
+                        <i class="fas fa-bed text-2xl text-orange-501"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">Comfortable Rooms</h3>
                     <p class="text-gray-600 leading-relaxed">Spacious, well-appointed rooms with modern amenities and stunning mountain views that will take your breath away</p>
                 </div>
-                <div class="text-center group hover-lift bg-white p-8 ">
+                <div class="text-center group bg-white p-8 ">
                     <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-200 transition-colors duration-300 hover-scale">
-                        <i class="fas fa-utensils text-2xl text-orange-600"></i>
+                        <i class="fas fa-utensils text-2xl text-orange-501"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">Delicious Meals</h3>
                     <p class="text-gray-600 leading-relaxed">Fresh, locally-sourced ingredients prepared by our expert chefs, offering a culinary journey through South African flavors</p>
                 </div>
-                <div class="text-center group hover-lift bg-white p-8 ">
+                <div class="text-center group bg-white p-8 ">
                     <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-200 transition-colors duration-300 hover-scale">
-                        <i class="fas fa-concierge-bell text-2xl text-orange-600"></i>
+                        <i class="fas fa-concierge-bell text-2xl text-orange-501"></i>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">24/7 Service</h3>
                     <p class="text-gray-600 leading-relaxed">Round-the-clock concierge service to make your stay memorable, with personalized attention to every detail</p>
@@ -365,17 +386,17 @@
     </section>
 
     <!-- Rooms Preview -->
-    <section class="py-20 bg-orange-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="py-20 bg-transparent ">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-16 fade-in">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Rooms</h2>
+                <h2 class="text-4xl section-title font-bold text-gray-900 mb-4">Our Rooms</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">Choose from our selection of carefully designed rooms, each offering comfort and authentic South African charm</p>
             </div>
             <div id="rooms-preview" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
                 <!-- Rooms will be loaded dynamically -->
             </div>
             <div class="text-center mt-12 fade-in">
-                <a href="/booking.html" class="btn-animate inline-flex items-center justify-center px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg text-lg">
+                <a href="/booking.html" class="btn-animate inline-flex items-center justify-center px-8 py-4 bg-orange-501 hover:bg-orange-502 text-white font-semibold rounded-lg text-lg">
                     <i class="fas fa-search mr-3"></i>
                     View All Rooms & Book
                 </a>
@@ -383,9 +404,9 @@
         </div>
     </section>
     <!-- About Section -->
-    <section id="about" class="pt-5 min-h-screen bg-orange-50">
+    <section id="about" class="pt-5 min-h-screen bg-orange-101">
         <!-- Main About Section -->
-        <section class="py-20">
+        <section class="py-20 ">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="fade-in-left">
@@ -406,27 +427,27 @@
                         <!-- Amenities Grid -->
                         <div class="grid grid-cols-2 gap-4 stagger-children">
                             <div class="flex items-center space-x-3 hover-scale">
-                                <i class="fas fa-wifi text-orange-600 text-xl"></i>
+                                <i class="fas fa-wifi text-orange-501 text-xl"></i>
                                 <span class="text-gray-700">Free WiFi</span>
                             </div>
                             <div class="flex items-center space-x-3 hover-scale">
-                                <i class="fas fa-car text-orange-600 text-xl"></i>
+                                <i class="fas fa-car text-orange-501 text-xl"></i>
                                 <span class="text-gray-700">Free Parking</span>
                             </div>
                             <div class="flex items-center space-x-3 hover-scale">
-                                <i class="fas fa-swimming-pool text-orange-600 text-xl"></i>
+                                <i class="fas fa-swimming-pool text-orange-501 text-xl"></i>
                                 <span class="text-gray-700">Swimming Pool</span>
                             </div>
                             <div class="flex items-center space-x-3 hover-scale">
-                                <i class="fas fa-couch text-orange-600 text-xl"></i>
+                                <i class="fas fa-couch text-orange-501 text-xl"></i>
                                 <span class="text-gray-700">Lounge Area</span>
                             </div>
                             <div class="flex items-center space-x-3 hover-scale">
-                                <i class="fas fa-leaf text-orange-600 text-xl"></i>
+                                <i class="fas fa-leaf text-orange-501 text-xl"></i>
                                 <span class="text-gray-700">Nature Walks</span>
                             </div>
                             <div class="flex items-center space-x-3 hover-scale">
-                                <i class="fas fa-home text-orange-600 text-xl"></i>
+                                <i class="fas fa-home text-orange-501 text-xl"></i>
                                 <span class="text-gray-700">Daily Housekeeping</span>
                             </div>
                         </div>
@@ -438,7 +459,7 @@
                             alt="Phokela Guest House Building" 
                             class="rounded-2xl shadow-xl w-full h-auto hover-scale"
                         />
-                        <div class="absolute -bottom-6 -right-6 bg-orange-600 text-white p-6 rounded-xl shadow-lg scale-in">
+                        <div class="absolute -bottom-6 -right-6 bg-orange-501 text-white p-6 rounded-xl shadow-lg scale-in">
                             <h3 class="text-2xl text-white font-bold mb-2">12+ Years</h3>
                             <p class="text-sm text-white">of Excellence</p>
                         </div>
@@ -448,29 +469,29 @@
         </section>
 
         <!-- Features Section -->
-        <section class="py-20">
+        <section class="py-20 parallax parallax-features">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 stagger-children">
-                    <div class="bg-transparent text-center p-8 hover-lift">
-                        <i class="fas fa-map-marker-alt text-black text-3xl mb-4 hover-scale"></i>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Prime Location</h3>
-                        <p class="text-gray-600">
+                    <div class="text-center p-8 ">
+                        <i class="fas fa-map-marker-alt text-white text-3xl mb-4 hover-scale"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">Prime Location</h3>
+                        <p class="text-white">
                             Located in the heart of Limpopo province, close to major attractions and nature reserves
                         </p>
                     </div>
 
-                    <div class="bg-transparent text-center p-8 hover-lift">
-                        <i class="fas fa-award text-black text-3xl mb-4 hover-scale"></i>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Award Winning</h3>
-                        <p class="text-gray-600">
+                    <div class="text-center p-8 ">
+                        <i class="fas fa-award text-white text-3xl mb-4 hover-scale"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">Award Winning</h3>
+                        <p class="text-white">
                             Recognized for outstanding hospitality and commitment to sustainable tourism
                         </p>
                     </div>
 
-                    <div class="bg-transparent text-center p-8 hover-lift">
-                        <i class="fas fa-leaf text-black text-3xl mb-4 hover-scale"></i>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Eco Friendly</h3>
-                        <p class="text-gray-600">
+                    <div class="text-center p-8 ">
+                        <i class="fas fa-leaf text-white text-3xl mb-4 hover-scale"></i>
+                        <h3 class="text-xl font-bold text-white mb-2">Eco Friendly</h3>
+                        <p class="text-white">
                             Committed to environmental conservation and sustainable practices
                         </p>
                     </div>
@@ -482,7 +503,7 @@
         <section class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 fade-in">
-                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Story</h2>
+                    <h2 class="text-4xl section-title font-bold text-gray-900 mb-4">Our Story</h2>
                     <p class="text-xl text-gray-600 max-w-3xl mx-auto">
                         A journey of passion, dedication, and South African hospitality
                     </p>
@@ -543,29 +564,33 @@
         </section>
     
     <!-- Location -->
-    <section class="py-20 bg-orange-50">
+    <section class="py-20 bg-orange-101">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h2 class="text-4xl font-bold text-gray-900 mb-6">Our Location</h2>
+                    <h2 class="text-4xl section-title font-bold text-gray-900 mb-6">Our Location</h2>
                     <p class="text-lg text-gray-600 mb-6">
-                        Phokela Guest House is strategically located in the heart of the Drakensberg Mountains, offering easy access to some of South Africa's most spectacular natural attractions. Our prime location provides the perfect balance of seclusion and convenience.
+                       Phokela Guest House is situated at 108 Van Riebeeck Street, Mokopane, in the Limpopo Province of South Africa. 
+
+The guest house lies about 1.7 km from Mokopane town centre, making it conveniently accessible for both business and leisure visitors. 
+
+It is also around 60 km from Polokwane International Airport, and within reasonable driving distance to nearby attractions such as Witvinger Nature Reserve (approx. 25 km), Geyser Station, and the Kameeldoring Golf Club.
                     </p>
                     <div class="space-y-4">
                         <div class="flex items-center">
-                            <i class="fas fa-home text-orange-600 mr-3"></i>
+                            <i class="fas fa-home text-orange-501 mr-3"></i>
                             <span class="text-gray-700">Daily Housekeeping</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="fas fa-water text-orange-600 mr-3"></i>
+                            <i class="fas fa-water text-orange-501 mr-3"></i>
                             <span class="text-gray-700">Swimming Pool</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="fas fa-car text-orange-600 mr-3"></i>
+                            <i class="fas fa-car text-orange-501 mr-3"></i>
                             <span class="text-gray-700">Free parking available on-site</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="fas fa-wifi text-orange-600 mr-3"></i>
+                            <i class="fas fa-wifi text-orange-501 mr-3"></i>
                             <span class="text-gray-700">Complimentary high-speed WiFi throughout</span>
                         </div>
                     </div>
@@ -590,33 +615,33 @@
     </section>
     </section>
     <!-- Our Values -->
-    <section class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="py-20 parallax parallax-values">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Values</h2>
-                <p class="text-xl text-gray-600">The principles that guide everything we do</p>
+                <h2 class="text-4xl section-title font-bold text-white mb-4">Our Values</h2>
+                <p class="text-xl text-white">The principles that guide everything we do</p>
             </div>
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-transparent p-8">
+                <div class="bg-black/30 backdrop-blur-sm rounded-lg p-8">
                     <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-heart text-2xl text-orange-600"></i>
+                        <i class="fas fa-heart text-2xl text-orange-501"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-4 text-center">Hospitality</h3>
-                    <p class="text-gray-600 text-center">We treat every guest like family, ensuring their comfort and satisfaction is our top priority.</p>
+                    <h3 class="text-xl font-semibold mb-4 text-center text-white">Hospitality</h3>
+                    <p class="text-white text-center">We treat every guest like family, ensuring their comfort and satisfaction is our top priority.</p>
                 </div>
-                <div class="bg-transparent p-8 ">
+                <div class="bg-black/30 backdrop-blur-sm rounded-lg p-8 ">
                     <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-leaf text-2xl text-orange-600"></i>
+                        <i class="fas fa-leaf text-2xl text-orange-501"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-4 text-center">Sustainability</h3>
-                    <p class="text-gray-600 text-center">We're committed to protecting our beautiful environment through eco-friendly practices and local partnerships.</p>
+                    <h3 class="text-xl font-semibold mb-4 text-center text-white">Sustainability</h3>
+                    <p class="text-white text-center">We're committed to protecting our beautiful environment through eco-friendly practices and local partnerships.</p>
                 </div>
-                <div class="bg-transparent p-8">
+                <div class="bg-black/30 backdrop-blur-sm rounded-lg p-8">
                     <div class="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="fas fa-star text-2xl text-orange-600"></i>
+                        <i class="fas fa-star text-2xl text-orange-501"></i>
                     </div>
-                    <h3 class="text-xl font-semibold mb-4 text-center">Excellence</h3>
-                    <p class="text-gray-600 text-center">We continuously strive to exceed expectations and provide exceptional experiences for all our guests.</p>
+                    <h3 class="text-xl font-semibold mb-4 text-center text-white">Excellence</h3>
+                    <p class="text-white text-center">We continuously strive to exceed expectations and provide exceptional experiences for all our guests.</p>
                 </div>
             </div>
         </div>
@@ -624,11 +649,11 @@
 
 
     <!-- Contact Section -->
-    <section id="contact" class="pt-16 min-h-screen bg-amber-50">
+    <section id="contact" class="pt-16 min-h-screen bg-orange-101">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <!-- Header -->
             <div class="text-center mb-16 fade-in">
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Contact Us</h1>
+                <h1 class="text-4xl md:text-5xl section-title font-bold text-gray-900 mb-4">Contact Us</h1>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
                     Get in touch with us for bookings, inquiries, or just to say hello
                 </p>
@@ -650,7 +675,7 @@
                                         id="firstName"
                                         name="firstName"
                                         required
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-501 focus:border-transparent transition-colors"
                                         placeholder="Enter your first name"
                                     />
                                 </div>
@@ -663,7 +688,7 @@
                                         id="lastName"
                                         name="lastName"
                                         required
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-501 focus:border-transparent transition-colors"
                                         placeholder="Enter your last name"
                                     />
                                 </div>
@@ -678,7 +703,7 @@
                                     id="email"
                                     name="email"
                                     required
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-501 focus:border-transparent transition-colors"
                                     placeholder="Enter your email address"
                                 />
                             </div>
@@ -691,7 +716,7 @@
                                     type="tel"
                                     id="phone"
                                     name="phone"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-501 focus:border-transparent transition-colors"
                                     placeholder="Enter your phone number"
                                 />
                             </div>
@@ -704,7 +729,7 @@
                                     id="subject"
                                     name="subject"
                                     required
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-501 focus:border-transparent transition-colors"
                                 >
                                     <option value="">Select a subject</option>
                                     <option value="booking">Booking Inquiry</option>
@@ -724,7 +749,7 @@
                                     name="message"
                                     required
                                     rows="5"
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors resize-vertical"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-501 focus:border-transparent transition-colors resize-vertical"
                                     placeholder="Enter your message here..."
                                 ></textarea>
                             </div>
@@ -732,7 +757,7 @@
                             <button
                                 type="submit"
                                 id="submit-btn"
-                                class="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="w-full bg-orange-502 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <span id="submit-text">Send Message</span>
                                 <span id="submit-loading" class="hidden">
@@ -750,30 +775,30 @@
                             <h2 class="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h2>
                             <div class="space-y-6">
                                 <div class="flex items-start space-x-4">
-                                    <i class="fas fa-map-marker-alt text-orange-600 text-xl mt-1 flex-shrink-0"></i>
+                                    <i class="fas fa-map-marker-alt text-orange-502 text-xl mt-1 flex-shrink-0"></i>
                                     <div>
                                         <h4 class="font-semibold text-gray-900">Address</h4>
                                         <p class="text-gray-600">
-                                            123 Mokopane Road<br />
-                                            Polokwane, Limpopo 0700<br />
+                                            108 Van Riebeeck Street<br />
+                                            Mokopane, Limpopo 0700<br />
                                             South Africa
                                         </p>
                                     </div>
                                 </div>
                                 
                                 <div class="flex items-center space-x-4">
-                                    <i class="fas fa-phone text-orange-600 text-xl flex-shrink-0"></i>
+                                    <i class="fas fa-phone text-orange-502 text-xl flex-shrink-0"></i>
                                     <div>
                                         <h4 class="font-semibold text-gray-900">Phone</h4>
-                                        <p class="text-gray-600">+27 15 123 4567</p>
+                                        <p class="text-gray-600">+27 76 691 1116</p>
                                     </div>
                                 </div>
                                 
                                 <div class="flex items-center space-x-4">
-                                    <i class="fas fa-envelope text-orange-600 text-xl flex-shrink-0"></i>
+                                    <i class="fas fa-envelope text-orange-502 text-xl flex-shrink-0"></i>
                                     <div>
                                         <h4 class="font-semibold text-gray-900">Email</h4>
-                                        <p class="text-gray-600">info@phokelaguest.co.za</p>
+                                        <p class="text-gray-600">sali.phokela@gmail.com</p>
                                     </div>
                                 </div>
                                 
@@ -782,12 +807,12 @@
                                     <div>
                                         <h4 class="font-semibold text-gray-900">WhatsApp</h4>
                                         <a 
-                                            href="https://wa.me/27151234567" 
-                                            class="text-green-500 hover:text-orange-600 transition-colors"
+                                            href="https://wa.me/27766911116" 
+                                            class="text-green-500 hover:text-orange-502 transition-colors"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            +27 15 123 4567
+                                            +27 76 691 1116
                                         </a>
                                     </div>
                                 </div>
@@ -818,45 +843,46 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
+     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-8">
-                <div class="md:col-span-2">
-                    <div class="flex items-center mb-6">
-                        <div class="bg-orange-500 p-3 rounded-lg mr-4">
-                            <i class="fas fa-home text-2xl text-white"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold">Phokela Guest House</h3>
+                <div>
+                       <div class="flex items-center ">
+  <div class=" rounded-lg mr-4">
+   <img 
+    class="w-32 h-auto max-w-full mr-4"  
+    src="/images/logo2-0bg.png" 
+    loading="lazy" 
+    alt="Phokela Guest House">
+  </div>
+
                     </div>
-                    <p class="text-gray-300 leading-relaxed mb-6">Your home away from home in the beautiful mountains of South Africa. Experience luxury, comfort, and unforgettable memories.</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="bg-gray-800 hover:bg-gray-700 p-3 rounded-lg transition-colors duration-300">
-                            <i class="fab fa-facebook text-white"></i>
-                        </a>
-                        <a href="#" class="bg-gray-800 hover:bg-gray-700 p-3 rounded-lg transition-colors duration-300">
-                            <i class="fab fa-instagram text-white"></i>
-                        </a>
-                        <a href="#" class="bg-gray-800 hover:bg-gray-700 p-3 rounded-lg transition-colors duration-300">
-                            <i class="fab fa-twitter text-white"></i>
-                        </a>
-                    </div>
+                    <p class="text-gray-400">Your home away from home in the beautiful mountains of South Africa.</p>
                 </div>
                 <div>
-                    <h4 class="text-lg font-semibold mb-6">Quick Links</h4>
-                    <ul class="space-y-3">
-                        <li><a href="/" class="text-gray-300 hover:text-white transition-colors duration-300">Home</a></li>
-                        <li><a href="/about.html" class="text-gray-300 hover:text-white transition-colors duration-300">About</a></li>
-                        <li><a href="/gallery.html" class="text-gray-300 hover:text-white transition-colors duration-300">Gallery</a></li>
-                        <li><a href="/booking.html" class="text-gray-300 hover:text-white transition-colors duration-300">Book Now</a></li>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="/about.html" class="text-gray-400 hover:text-white transition">About</a></li>
+                        <li><a href="/gallery.html" class="text-gray-400 hover:text-white transition">Gallery</a></li>
+                        <li><a href="/booking.html" class="text-gray-400 hover:text-white transition">Book Now</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-lg font-semibold mb-6">Services</h4>
-                    <ul class="space-y-3">
-                        <li class="text-gray-300">Room Service</li>
-                        <li class="text-gray-300">Concierge</li>
-                        <li class="text-gray-300">Free WiFi</li>
-                        <li class="text-gray-300">Parking</li>
+                    <h4 class="text-lg font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400">Room Service</li>
+                        <li class="text-gray-400">Concierge</li>
+                        <li class="text-gray-400">Free WiFi</li>
+                        <li class="text-gray-400">Parking</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400">+27 12 345 6789</li>
+                        <li class="text-gray-400">info@phokelaguesthouse.co.za</li>
+                        <li class="text-gray-400">123 Mountain View Road</li>
                     </ul>
                 </div>
             </div>
@@ -865,6 +891,7 @@
             </div>
         </div>
     </footer>
+
 
     <script src="/js/main.js"></script>
     <script src="/js/home.js"></script>

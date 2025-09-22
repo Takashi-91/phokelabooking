@@ -1583,6 +1583,20 @@ h1, h2, h3, h4, h5, h6 {
   --tw-bg-opacity: 1;
   background-color: rgb(249 115 22 / var(--tw-bg-opacity, 1));
 }
+.bg-orange-501 {
+  --tw-bg-opacity: 1;
+  background-color: #8f7357;
+}
+
+.bg-orange-101 {
+    --tw-bg-opacity: 1;
+    background-color: #dccab84f;
+}
+
+.bg-orange-502 {
+  --tw-bg-opacity: 1;
+  background-color: #a07850;
+}
 
 .bg-orange-600 {
   --tw-bg-opacity: 1;
@@ -2379,3 +2393,5 @@ html {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 } 
+
+.parallax-features { background-image:linear-gradient(rgba(0, 0, 0, 0.25), rgb(0 0 0)), url(/images/pool.jpg); }

@@ -513,20 +513,14 @@ router.post('/payments/verify', async (req, res) => {
     const { reference } = req.body; 
     if (!reference) return res.status(400).json({ message: 'reference required' }); 
     
-    console.log(`🔍 Verifying payment for reference: ${reference}`);
-    
     const verification = await verifyPaystackTransaction(reference);
-    console.log(`📊 Paystack verification result:`, verification);
     
     if (verification.success) {
       const isPaid = verification.data.status === 'success';
-      console.log(`💰 Payment status: ${isPaid ? 'PAID' : 'NOT PAID'}`);
       
       // If payment is successful, find and update the booking
       if (isPaid) {
         const booking = await Booking.findOne({ bookingReference: reference });
-        console.log(`📋 Found booking:`, booking ? booking._id : 'NOT FOUND');
-        
         if (booking && booking.paymentStatus !== 'paid') {
           // Update booking status to confirmed and paid
           const updatedBooking = await Booking.findByIdAndUpdate(booking._id, { 
@@ -659,29 +653,24 @@ router.post('/bookings/with-payment', async (req, res) => {
     
     // Check minimum stay requirement
     const nights = Math.ceil((checkoutDate - checkinDate) / (1000*60*60*24));
-    const minStay = roomType.minStay || 1;
-    const maxStay = roomType.maxStay || 30;
-    
-    if (nights < minStay) {
-      return res.status(400).json({ message: `Minimum stay is ${minStay} nights` });
+    if (nights < roomType.minStay) {
+      return res.status(400).json({ message: `Minimum stay is ${roomType.minStay} nights` });
     }
     
     // Check maximum stay requirement
-    if (nights > maxStay) {
-      return res.status(400).json({ message: `Maximum stay is ${maxStay} nights` });
+    if (nights > roomType.maxStay) {
+      return res.status(400).json({ message: `Maximum stay is ${roomType.maxStay} nights` });
     }
     
     // Check blackout dates
-    if (roomType.blackoutDates && roomType.blackoutDates.length > 0) {
-      const isBlackedOut = roomType.blackoutDates.some(blackout => {
-        const blackoutStart = new Date(blackout.startDate);
-        const blackoutEnd = new Date(blackout.endDate);
-        return (checkinDate <= blackoutEnd && checkoutDate >= blackoutStart);
-      });
-      
-      if (isBlackedOut) {
-        return res.status(400).json({ message: 'Room type is not available for the selected dates due to blackout period' });
-      }
+    const isBlackedOut = roomType.blackoutDates.some(blackout => {
+      const blackoutStart = new Date(blackout.startDate);
+      const blackoutEnd = new Date(blackout.endDate);
+      return (checkinDate <= blackoutEnd && checkoutDate >= blackoutStart);
+    });
+    
+    if (isBlackedOut) {
+      return res.status(400).json({ message: 'Room type is not available for the selected dates due to blackout period' });
     }
     
     // Find available room unit
@@ -716,22 +705,19 @@ router.post('/bookings/with-payment', async (req, res) => {
         ]
       });
       
-      // Check for booking conflicts for each unit
-      const availableUnitsList = [];
+      // Check for booking conflicts
+      const conflictingBookings = await Booking.find({
+        roomTypeId: data.roomTypeId,
+        status: { $ne: 'cancelled' },
+        $or: [
+          { checkinDate: { $lte: checkoutDate }, checkoutDate: { $gte: checkinDate } }
+        ]
+      });
       
-      for (const unit of availableUnits) {
-        const conflict = await Booking.exists({
-          roomUnitId: unit._id,
-          status: { $ne: 'cancelled' },
-          $or: [
-            { checkinDate: { $lte: checkoutDate }, checkoutDate: { $gte: checkinDate } }
-          ]
-        });
-        
-        if (!conflict) {
-          availableUnitsList.push(unit);
-        }
-      }
+      const occupiedUnitIds = new Set(conflictingBookings.map(booking => booking.roomUnitId.toString()));
+      const availableUnitsList = availableUnits.filter(unit => 
+        !occupiedUnitIds.has(unit._id.toString())
+      );
       
       if (availableUnitsList.length === 0) {
         return res.status(400).json({ message: 'No room units available for the selected dates' });
@@ -782,7 +768,7 @@ router.post('/bookings/with-payment', async (req, res) => {
         checkoutDate: checkoutDate.toISOString()
       },
       currency: 'ZAR', // South African Rand
-      callback_url: `${process.env.BASE_URL || 'http://localhost:5000'}/booking.html?payment=callback&reference=${bookingReference}`
+      callback_url: `${process.env.BASE_URL || 'http://localhost:3000'}/booking.html?payment=callback&reference=${bookingReference}`
     });
     
     if (!paystackResult.success) {

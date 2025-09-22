@@ -1,4 +1,16 @@
 // Home page functionality
+ setTimeout(() => {
+    const video = document.getElementById("hero-video");
+    const image = document.getElementById("hero-image");
+
+    image.classList.remove("opacity-0");
+    image.classList.add("opacity-100");
+
+    // Optionally hide the video after fade-in completes
+    setTimeout(() => {
+      video.classList.add("hidden");
+    }, 1000); // matches duration-1000 (1s)
+  }, 10000);
 
 document.addEventListener('DOMContentLoaded', function() {
     loadRoomsPreview();
@@ -41,7 +53,7 @@ function displayRoomsPreview(rooms) {
                      alt="${room.name}" 
                      class="w-full h-48 object-cover">
                 <div class="absolute top-4 right-4">
-                    <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">Featured</span>
+                    <span class="bg-orange-501 text-white px-3 py-1 rounded-full text-sm font-medium">Featured</span>
                 </div>
             </div>
             <div class="p-6">
@@ -62,7 +74,7 @@ function displayRoomsPreview(rooms) {
                     ).join('')}
                     ${room.amenities.length > 3 ? `<span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">+${room.amenities.length - 3} more</span>` : ''}
                 </div>
-                <a href="/booking.html" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300 text-center block">
+                <a href="/booking.html" class="w-full bg-orange-501 hover:bg-orange-502 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300 text-center block">
                     Book Now
                 </a>
             </div>
